@@ -137,6 +137,14 @@ public class Operation extends Expression {
 
 	}
 
+	public static final IntConstant ZERO = new IntConstant(0);
+
+	public static final IntConstant ONE = new IntConstant(1);
+
+	public static final Expression FALSE = new Operation(Operation.Operator.EQ, ZERO, ONE);
+
+	public static final Expression TRUE = new Operation(Operation.Operator.EQ, ZERO, ZERO);
+
 	private Operator operator = null;
 
 	private Expression[] operands = null;
