@@ -5,7 +5,7 @@ import java.util.Map;
 
 import za.ac.sun.cs.green.expr.Expression;
 import za.ac.sun.cs.green.expr.Operation;
-import za.ac.sun.cs.green.filter.Filter;
+import za.ac.sun.cs.green.service.Service;
 
 /**
  * An {@code Instance} instance describes a constraint about which different
@@ -40,17 +40,17 @@ public abstract class Instance {
 	protected Expression fullExpression;
 
 	/**
-	 * A store where filters are allowed to store data that are relevant only to
-	 * this instance. The keys of the mapping are the filter classes themselves,
-	 * and it is up to the filters to manage their values.
+	 * A store where services are allowed to store data that are relevant only to
+	 * this instance. The keys of the mapping are the service classes themselves,
+	 * and it is up to the services to manage their values.
 	 */
-	private Map<Class<? extends Filter>, Object> filterData;
+	private Map<Class<? extends Service>, Object> serviceData;
 
 	public Instance(Solver solver, Instance parent, Expression expression) {
 		this.solver = solver;
 		this.parent = parent;
 		this.expression = expression;
-		filterData = new HashMap<Class<? extends Filter>, Object>();
+		serviceData = new HashMap<Class<? extends Service>, Object>();
 	}
 
 	/**
@@ -90,33 +90,26 @@ public abstract class Instance {
 	}
 
 	/**
-	 * Returns the data associated with the given filter class.
+	 * Returns the data associated with the given service class.
 	 * 
-	 * @param filterClass
-	 *            the class of the filter
-	 * @return the data associated with the filter class (may be null)
+	 * @param serviceClass
+	 *            the class of the service
+	 * @return the data associated with the service class (may be null)
 	 */
-	public Object getFilterData(Class<? extends Filter> filterClass) {
-		return filterData.get(filterClass);
+	public Object getServiceData(Class<? extends Service> serviceClass) {
+		return serviceData.get(serviceClass);
 	}
 
 	/**
-	 * Sets the data associated with the given filter class.
+	 * Sets the data associated with the given service class.
 	 * 
-	 * @param filterClass
-	 *            the class of the filter
+	 * @param serviceClass
+	 *            the class of the service
 	 * @param data
-	 *            the new data associated with the filter class
+	 *            the new data associated with the service class
 	 */
-	public void setFilterData(Class<? extends Filter> filterClass, Object data) {
-		filterData.put(filterClass, data);
-	}
-
-	/**
-	 * 
-	 */
-	public Object filter(Request request) {
-		return solver.filter(request, this);
+	public void setServiceData(Class<? extends Service> serviceClass, Object data) {
+		serviceData.put(serviceClass, data);
 	}
 
 	/**

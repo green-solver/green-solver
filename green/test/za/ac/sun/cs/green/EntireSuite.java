@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import za.ac.sun.cs.green.expr.ExprTest;
-import za.ac.sun.cs.green.filter.SlicerTest;
+import za.ac.sun.cs.green.service.SlicerTest;
 
 @RunWith(Suite.class)
 
@@ -21,6 +21,6 @@ import za.ac.sun.cs.green.filter.SlicerTest;
 
 public class EntireSuite {
 	
-	public static final boolean DETAILED_LOG = false;
+	public static final boolean DETAILED_LOG = true;
 	
 }
