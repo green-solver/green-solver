@@ -1,4 +1,4 @@
-package za.ac.sun.cs.green.filter;
+package za.ac.sun.cs.green.service;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import za.ac.sun.cs.green.expr.IntConstant;
 import za.ac.sun.cs.green.expr.IntVariable;
 import za.ac.sun.cs.green.expr.Operation;
 import za.ac.sun.cs.green.logger.GreenHandler;
+import za.ac.sun.cs.green.service.Slicer;
 import za.ac.sun.cs.green.store.NullStore;
 
 public class SlicerTest {
@@ -50,7 +51,7 @@ public class SlicerTest {
 		assertTrue(e.equals(expression));
 		assertEquals(expression.toString(), e.toString());
 		assertEquals(fullStr, i.getFullExpression().toString());
-		solver.filter(null, i);
+		solver.issueRequest(null, i);
 		finalCheckSlicing(i.getFullExpression().toString(), slicedStrs);
 	}
 
@@ -61,7 +62,7 @@ public class SlicerTest {
 		assertTrue(e.equals(expression));
 		assertEquals(expression.toString(), e.toString());
 		assertEquals(fullStr, i2.getFullExpression().toString());
-		solver.filter(null, i2);
+		solver.issueRequest(null, i2);
 		finalCheckSlicing(i2.getFullExpression().toString(), slicedStrs);
 	}
 

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import za.ac.sun.cs.green.filter.Filter;
 import za.ac.sun.cs.green.service.Service;
 import za.ac.sun.cs.green.store.NullStore;
 import za.ac.sun.cs.green.store.Store;
@@ -22,15 +21,12 @@ public class Solver {
 	 */
 	private Store store;
 
-	private List<Filter> filters;
-
 	private List<Service> services;
 
 	public Solver() {
 		logger = Logger.getLogger("za.ac.sun.cs.green");
 		logger.setUseParentHandlers(false);
 		new NullStore(this);
-		filters = new LinkedList<Filter>();
 		services = new LinkedList<Service>();
 	}
 
@@ -43,11 +39,6 @@ public class Solver {
 		this.store = store;
 	}
 
-	public void addFilter(Filter filter) {
-		logger.info("adding filter " + filter.getClass().getCanonicalName());
-		filters.add(filter);
-	}
-
 	public void addService(Service service) {
 		logger.info("adding service" + service.getClass().getCanonicalName());
 		services.add(service);
@@ -55,9 +46,6 @@ public class Solver {
 
 	public void report() {
 		store.report();
-		for (Filter f : filters) {
-			f.report();
-		}
 		for (Service s : services) {
 			s.report();
 		}
@@ -65,27 +53,10 @@ public class Solver {
 
 	public void shutdown() {
 		store.shutdown();
-		for (Filter f : filters) {
-			f.shutdown();
-		}
 		for (Service s : services) {
 			s.shutdown();
 		}
 		logger.info("shutdown");
-	}
-
-	public Object filter(Request request, Instance instance) {
-		logger.fine("filter: " + instance);
-		for (Filter f : filters) {
-			logger.fine("filtering through " + f.getName());
-			Object r = f.handle(request, instance);
-			if (r != UNSOLVED) {
-				logger.fine("filter returned result " + r);
-				return r;
-			}
-		}
-		logger.fine("no filter returned a result");
-		return UNSOLVED;
 	}
 
 	public Object issueRequest(Request request, Instance instance) {

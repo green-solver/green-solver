@@ -1,4 +1,4 @@
-package za.ac.sun.cs.green.filter;
+package za.ac.sun.cs.green.service;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import za.ac.sun.cs.green.expr.Operation;
 import za.ac.sun.cs.green.expr.Variable;
 import za.ac.sun.cs.green.expr.Visitor;
 
-public class Slicer extends AbstractFilter {
+public class Slicer extends AbstractService {
 
 	/**
 	 * Number of times the slicer has been invoked.
@@ -50,10 +50,10 @@ public class Slicer extends AbstractFilter {
 	public Object handle(Request request, Instance instance) {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> data = (Map<String, Object>) instance
-				.getFilterData(getClass());
+				.getServiceData(getClass());
 		if (data == null) {
 			data = new HashMap<String, Object>();
-			instance.setFilterData(getClass(), data);
+			instance.setServiceData(getClass(), data);
 			slice(data, instance);
 		}
 		return Solver.UNSOLVED;
@@ -71,7 +71,7 @@ public class Slicer extends AbstractFilter {
 			handle(null, parent);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> parentData = (Map<String, Object>) parent
-					.getFilterData(getClass());
+					.getServiceData(getClass());
 			rest = (Expression) parentData.get("oldFullExpression");
 			full = new Operation(Operation.Operator.AND, fresh, rest);
 		}
