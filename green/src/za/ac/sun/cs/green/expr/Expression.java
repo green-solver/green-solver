@@ -2,7 +2,7 @@ package za.ac.sun.cs.green.expr;
 
 public abstract class Expression implements Comparable<Expression> {
 
-	public abstract void accept(Visitor visitor);
+	public abstract void accept(Visitor visitor) throws VisitorException;
 
 	@Override
 	public final int compareTo(Expression expression) {

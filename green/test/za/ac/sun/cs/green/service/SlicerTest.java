@@ -2,8 +2,6 @@ package za.ac.sun.cs.green.service;
 
 import static org.junit.Assert.*;
 
-import java.util.logging.Level;
-
 import org.junit.Test;
 
 import za.ac.sun.cs.green.EntireSuite;
@@ -13,7 +11,6 @@ import za.ac.sun.cs.green.expr.Expression;
 import za.ac.sun.cs.green.expr.IntConstant;
 import za.ac.sun.cs.green.expr.IntVariable;
 import za.ac.sun.cs.green.expr.Operation;
-import za.ac.sun.cs.green.logger.GreenHandler;
 import za.ac.sun.cs.green.service.Slicer;
 import za.ac.sun.cs.green.store.NullStore;
 
@@ -24,7 +21,7 @@ public class SlicerTest {
 	private Solver createSolver() {
 		Solver solver = new Solver();
 		if (DETAILED_LOG) {
-			solver.logger.addHandler(new GreenHandler(Level.FINE));
+			EntireSuite.setDetailedLogger(solver);
 		}
 		new NullStore(solver);
 		new Slicer(solver);

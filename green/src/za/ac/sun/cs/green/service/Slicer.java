@@ -1,19 +1,21 @@
 package za.ac.sun.cs.green.service;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.logging.Level;
 
 import za.ac.sun.cs.green.Instance;
-import za.ac.sun.cs.green.Request;
 import za.ac.sun.cs.green.Solver;
 import za.ac.sun.cs.green.expr.Expression;
 import za.ac.sun.cs.green.expr.Operation;
 import za.ac.sun.cs.green.expr.Variable;
 import za.ac.sun.cs.green.expr.Visitor;
+import za.ac.sun.cs.green.expr.VisitorException;
 
 public class Slicer extends AbstractService {
 
@@ -47,7 +49,7 @@ public class Slicer extends AbstractService {
 	}
 
 	@Override
-	public Object handle(Request request, Instance instance) {
+	public Serializable handle(Object request, Instance instance) {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> data = (Map<String, Object>) instance
 				.getServiceData(getClass());
@@ -57,6 +59,11 @@ public class Slicer extends AbstractService {
 			slice(data, instance);
 		}
 		return Solver.UNSOLVED;
+	}
+
+	@Override
+	public String getStoreKey(Object request, Instance instance) {
+		return null;
 	}
 
 	private void slice(Map<String, Object> data, Instance instance) {
@@ -84,7 +91,11 @@ public class Slicer extends AbstractService {
 		Collector collector = new Collector(conjunct2Vars, var2Conjuncts);
 		// First collect the conjunct <-> variable information from the fresh
 		// conjunct
-		collector.explore(fresh);
+		try {
+			collector.explore(fresh);
+		} catch (VisitorException x) {
+			solver.logger.log(Level.SEVERE, "encountered an exception -- this should not be happening!", x);
+		}
 		// If there are no variables in the fresh conjunct, we do not modify the
 		// instance any further: its conjunct forms a trivial slice
 		if (conjunct2Vars.size() == 0) {
@@ -92,7 +103,11 @@ public class Slicer extends AbstractService {
 		}
 		// Otherwise, complete the mappings
 		if (rest != null) {
-			collector.explore(rest);
+			try {
+				collector.explore(rest);
+			} catch (VisitorException x) {
+				solver.logger.log(Level.SEVERE, "encountered an exception -- this should not be happening!", x);
+			}
 		}
 		// Update our statistics
 		totalConjunctCount += conjunct2Vars.size();
@@ -102,8 +117,12 @@ public class Slicer extends AbstractService {
 		Set<Expression> minimalConjuncts = new HashSet<Expression>();
 		Queue<Expression> workset = new LinkedList<Expression>();
 		Set<Variable> varSet = new HashSet<Variable>();
-		// The following 
-		fresh.accept(new Enqueuer(minimalConjuncts, workset));
+		// The following
+		try {
+			fresh.accept(new Enqueuer(minimalConjuncts, workset));
+		} catch (VisitorException x) {
+			solver.logger.log(Level.SEVERE, "encountered an exception -- this should not be happening!", x);
+		}
 		while (!workset.isEmpty()) {
 			Expression e = workset.remove();
 			Set<Variable> vs = conjunct2Vars.get(e);
@@ -143,10 +162,14 @@ public class Slicer extends AbstractService {
 		solver.logger.info("invocations = " + invocationCount);
 		solver.logger.info("totalConjuncts = " + totalConjunctCount);
 		solver.logger.info("minimalConjuncts = " + minimalConjunctCount);
-		solver.logger.info("conjunctReduction = " + ((totalConjunctCount - minimalConjunctCount) * 100.0D / totalConjunctCount));
+		solver.logger
+				.info("conjunctReduction = "
+						+ ((totalConjunctCount - minimalConjunctCount) * 100.0D / totalConjunctCount));
 		solver.logger.info("totalVariables = " + totalVariableCount);
 		solver.logger.info("minimalVariables = " + minimalVariableCount);
-		solver.logger.info("variableReduction = " + ((totalVariableCount - minimalVariableCount) * 100.0D / totalVariableCount));
+		solver.logger
+				.info("variableReduction = "
+						+ ((totalVariableCount - minimalVariableCount) * 100.0D / totalVariableCount));
 	}
 
 	/**
@@ -193,8 +216,10 @@ public class Slicer extends AbstractService {
 		 * 
 		 * @param expression
 		 *            the expression to explore
+		 * @throws VisitorException
+		 *             should never happen
 		 */
-		public void explore(Expression expression) {
+		public void explore(Expression expression) throws VisitorException {
 			currentConjunct = expression;
 			expression.accept(this);
 		}

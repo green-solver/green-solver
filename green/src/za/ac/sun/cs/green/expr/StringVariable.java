@@ -1,23 +1,9 @@
 package za.ac.sun.cs.green.expr;
 
-public class IntVariable extends Variable {
+public class StringVariable extends Variable {
 
-	private Integer lowerBound;
-
-	private Integer upperBound;
-
-	public IntVariable(String name, Integer lowerBound, Integer upperBound) {
+	public StringVariable(String name) {
 		super(name);
-		this.lowerBound = lowerBound;
-		this.upperBound = upperBound;
-	}
-
-	public Integer getLowerBound() {
-		return lowerBound;
-	}
-
-	public Integer getUpperBound() {
-		return upperBound;
 	}
 
 	@Override
@@ -28,14 +14,14 @@ public class IntVariable extends Variable {
 
 //	@Override
 //	public int compareTo(Expression expression) {
-//		IntVariable variable = (IntVariable) expression;
+//		RealVariable variable = (RealVariable) expression;
 //		return getName().compareTo(variable.getName());
 //	}
 
 	@Override
 	public boolean equals(Object object) {
-		if (object instanceof IntVariable) {
-			IntVariable variable = (IntVariable) object;
+		if (object instanceof StringVariable) {
+			StringVariable variable = (StringVariable) object;
 			return getName().equals(variable.getName());
 		} else {
 			return false;
