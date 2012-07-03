@@ -21,6 +21,6 @@ import za.ac.sun.cs.green.service.SlicerTest;
 
 public class EntireSuite {
 	
-	public static final boolean DETAILED_LOG = true;
+	public static final boolean DETAILED_LOG = false;
 	
 }
