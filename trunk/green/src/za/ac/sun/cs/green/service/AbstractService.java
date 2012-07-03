@@ -1,7 +1,8 @@
 package za.ac.sun.cs.green.service;
 
+import java.io.Serializable;
+
 import za.ac.sun.cs.green.Instance;
-import za.ac.sun.cs.green.Request;
 import za.ac.sun.cs.green.Solver;
 
 public abstract class AbstractService implements Service {
@@ -31,8 +32,13 @@ public abstract class AbstractService implements Service {
 	}
 
 	@Override
-	public Object handle(Request request, Instance instance) {
+	public Serializable handle(Object request, Instance instance) {
 		return Solver.UNSOLVED;
+	}
+
+	@Override
+	public String getStoreKey(Object request, Instance instance) {
+		return request.toString() + ':' + instance.toString();
 	}
 
 	@Override

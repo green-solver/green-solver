@@ -13,7 +13,7 @@ public class RealConstant extends Constant {
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public void accept(Visitor visitor) throws VisitorException {
 		visitor.preVisit(this);
 		visitor.postVisit(this);
 	}

@@ -39,7 +39,7 @@ public abstract class AbstractStore implements Store {
 	 * @return the object that is stored with the key or <code>null</code> if no
 	 *         association is found
 	 */
-	public Object get(String key) {
+	public Serializable get(String key) {
 		return null;
 	}
 

@@ -21,7 +21,7 @@ public class RealVariable extends Variable {
 	}
 
 	@Override
-	public void accept(Visitor visitor) {
+	public void accept(Visitor visitor) throws VisitorException {
 		visitor.preVisit(this);
 		visitor.postVisit(this);
 	}

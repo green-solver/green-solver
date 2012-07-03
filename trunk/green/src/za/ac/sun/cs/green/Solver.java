@@ -1,7 +1,9 @@
 package za.ac.sun.cs.green;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import za.ac.sun.cs.green.service.Service;
@@ -10,9 +12,11 @@ import za.ac.sun.cs.green.store.Store;
 
 public class Solver {
 
-	public static final Object UNSOLVED = new Object();
+	public static final Serializable UNSOLVED = "UNSOLVED";
 
-	public static final Object ERROR = new Object();
+	public static final Serializable ERROR = "ERROR";
+
+	public static final String REQUEST_ISSAT = "ISSAT";
 
 	public Logger logger;
 
@@ -26,6 +30,7 @@ public class Solver {
 	public Solver() {
 		logger = Logger.getLogger("za.ac.sun.cs.green");
 		logger.setUseParentHandlers(false);
+		logger.setLevel(Level.ALL);
 		new NullStore(this);
 		services = new LinkedList<Service>();
 	}
@@ -40,7 +45,7 @@ public class Solver {
 	}
 
 	public void addService(Service service) {
-		logger.info("adding service" + service.getClass().getCanonicalName());
+		logger.info("adding service " + service.getClass().getCanonicalName());
 		services.add(service);
 	}
 
@@ -59,13 +64,22 @@ public class Solver {
 		logger.info("shutdown");
 	}
 
-	public Object issueRequest(Request request, Instance instance) {
-		logger.fine("request issued: " + instance);
+	public Serializable issueRequest(Object request, Instance instance) {
+		logger.fine("request = " + request + ", instance " + instance);
+		String previousKey = null;
 		for (Service s : services) {
 			logger.fine("checking service " + s.getName());
-			Object r = s.handle(request, instance);
+			String key = s.getStoreKey(request, instance);
+			if (key != null && !key.equals(previousKey)) {
+				Serializable value = store.get(key);
+				if (value != null) {
+					return value;
+				}
+			}
+			Serializable r = s.handle(request, instance);
 			if (r != UNSOLVED) {
 				logger.fine("service returned result " + r);
+				store.put(key, r);
 				return r;
 			}
 		}

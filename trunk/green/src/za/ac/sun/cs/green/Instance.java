@@ -1,5 +1,6 @@
 package za.ac.sun.cs.green;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,7 +116,7 @@ public abstract class Instance {
 	/**
 	 * 
 	 */
-	public Object issueRequest(Request request) {
+	public Serializable issueRequest(Object request) {
 		return solver.issueRequest(request, this);
 	}
 

@@ -1,14 +1,14 @@
 package za.ac.sun.cs.green.expr;
 
-public class IntConstant extends Constant {
+public class StringConstant extends Constant {
 
-	private int value;
+	private String value;
 
-	public IntConstant(int value) {
+	public StringConstant(String value) {
 		this.value = value;
 	}
 
-	public int getValue() {
+	public String getValue() {
 		return value;
 	}
 
@@ -20,7 +20,7 @@ public class IntConstant extends Constant {
 
 //	@Override
 //	public int compareTo(Expression expression) {
-//		IntConstant constant = (IntConstant) expression;
+//		RealConstant constant = (RealConstant) expression;
 //		if (value < constant.value) {
 //			return -1;
 //		} else if (value > constant.value) {
@@ -32,8 +32,8 @@ public class IntConstant extends Constant {
 
 	@Override
 	public boolean equals(Object object) {
-		if (object instanceof IntConstant) {
-			IntConstant constant = (IntConstant) object;
+		if (object instanceof StringConstant) {
+			StringConstant constant = (StringConstant) object;
 			return value == constant.value;
 		} else {
 			return false;
@@ -42,12 +42,12 @@ public class IntConstant extends Constant {
 
 	@Override
 	public int hashCode() {
-		return value;
+		return value.hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return Integer.toString(value);
+		return value;
 	}
 
 }

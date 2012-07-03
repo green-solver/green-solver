@@ -153,6 +153,11 @@ public class ExprTest {
 		return checkOperation2(op, c, opStr + "(0)");
 	}
 
+	private Expression checkOperation3a(Operation.Operator op, String opStr) {
+		IntConstant c = new IntConstant(0);
+		return checkOperation2(op, c, opStr + "0");
+	}
+	
 	@Test
 	public void testOperation01() {
 		checkOperation1(Operation.Operator.EQ, "==");
@@ -198,9 +203,9 @@ public class ExprTest {
 
 	@Test
 	public void testOperation06() {
-		checkOperation3(Operation.Operator.NOT, "!");
-		checkOperation3(Operation.Operator.NEG, "-");
-		checkOperation3(Operation.Operator.BIT_NOT, "~");
+		checkOperation3a(Operation.Operator.NOT, "!");
+		checkOperation3a(Operation.Operator.NEG, "-");
+		checkOperation3a(Operation.Operator.BIT_NOT, "~");
 		checkOperation3(Operation.Operator.SIN, "SIN");
 		checkOperation3(Operation.Operator.COS, "COS");
 		checkOperation3(Operation.Operator.TAN, "TAN");
@@ -225,6 +230,11 @@ public class ExprTest {
 		return checkOperation2(op, v, opStr + "(v1)");
 	}
 
+	private Expression checkOperation5a(Operation.Operator op, String opStr) {
+		IntVariable v = new IntVariable("v1", 0, 99);
+		return checkOperation2(op, v, opStr + "v1");
+	}
+	
 	@Test
 	public void testOperation07() {
 		checkOperation4(Operation.Operator.EQ, "==");
@@ -270,9 +280,9 @@ public class ExprTest {
 
 	@Test
 	public void testOperation12() {
-		checkOperation5(Operation.Operator.NOT, "!");
-		checkOperation5(Operation.Operator.NEG, "-");
-		checkOperation5(Operation.Operator.BIT_NOT, "~");
+		checkOperation5a(Operation.Operator.NOT, "!");
+		checkOperation5a(Operation.Operator.NEG, "-");
+		checkOperation5a(Operation.Operator.BIT_NOT, "~");
 		checkOperation5(Operation.Operator.SIN, "SIN");
 		checkOperation5(Operation.Operator.COS, "COS");
 		checkOperation5(Operation.Operator.TAN, "TAN");

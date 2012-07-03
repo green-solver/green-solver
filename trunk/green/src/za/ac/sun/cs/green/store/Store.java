@@ -27,7 +27,7 @@ public interface Store {
 	 * @return the object that is stored with the key or <code>null</code> if no
 	 *         association is found
 	 */
-	public Object get(String key);
+	public Serializable get(String key);
 
 	/**
 	 * Returns the string that is associated with the given key. If there is
