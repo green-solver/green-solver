@@ -2,27 +2,29 @@ package za.ac.sun.cs.green.store;
 
 import java.io.Serializable;
 
-import za.ac.sun.cs.green.Solver;
+import za.ac.sun.cs.green.Green;
+import za.ac.sun.cs.green.util.Reporter;
 
-public class NullStore extends AbstractStore {
-
-	public NullStore(Solver solver) {
-		super(solver);
-	}
+public class NullStore extends BasicStore {
 
 	private int getCount = 0;
 
 	private int putCount = 0;
 
-	@Override
-	public void report() {
-		solver.logger.info("number of get requests = " + getCount);
-		solver.logger.info("number of put requests = " + putCount);
+	public NullStore(Green solver) {
+		super(solver);
 	}
 
 	@Override
-	public void put(String key, String value) {
-		putCount++;
+	public void report(Reporter reporter) {
+		reporter.report(getClass().getName(), "number of get requests = " + getCount);
+		reporter.report(getClass().getName(), "number of put requests = " + putCount);
+	}
+
+	@Override
+	public Object get(String key) {
+		getCount++;
+		return null;
 	}
 
 	@Override

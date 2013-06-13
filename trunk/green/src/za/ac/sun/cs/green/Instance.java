@@ -1,80 +1,53 @@
 package za.ac.sun.cs.green;
 
-import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import za.ac.sun.cs.green.expr.Expression;
 import za.ac.sun.cs.green.expr.Operation;
-import za.ac.sun.cs.green.service.Service;
 
-/**
- * An {@code Instance} instance describes a constraint about which different
- * question can be asked. For example, for a symbolic execution system this
- * might represent a path condition. Instances are organised hierarchically and
- * each instance has a parent that usually contains the greater part of the
- * constraint. The "fresh" part of the constraint is stored in the instance
- * itself, and the two parts are implicitly conjuncted.
- */
-public abstract class Instance {
+public class Instance {
 
-	/**
-	 * The solver to which this instance belongs. This is used to access the
-	 * available filters and services.
-	 */
-	protected Solver solver;
+	private final Green solver;
 
-	/**
-	 * The parent instance that contains the non-fresh part of the path
-	 * condition.
-	 */
-	protected Instance parent;
+	private Instance source;
+	
+	private final Instance parent;
 
-	/**
-	 * The fresh part of the constraint.
-	 */
-	protected Expression expression;
+	private final Expression expression;
 
-	/**
-	 * The full constraint.
-	 */
-	protected Expression fullExpression;
+	private Expression fullExpression;
 
-	/**
-	 * A store where services are allowed to store data that are relevant only to
-	 * this instance. The keys of the mapping are the service classes themselves,
-	 * and it is up to the services to manage their values.
-	 */
-	private Map<Class<? extends Service>, Object> serviceData;
+	private final Map<Object, Object> data;
 
-	public Instance(Solver solver, Instance parent, Expression expression) {
+	public Instance(final Green solver, final Instance parent, final Expression expression) {
 		this.solver = solver;
+		this.source = null;
 		this.parent = parent;
 		this.expression = expression;
-		serviceData = new HashMap<Class<? extends Service>, Object>();
+		fullExpression = null;
+		data = new Hashtable<Object, Object>();
 	}
 
-	/**
-	 * Returns the parent instance.
-	 * 
-	 * @return the parent instance
-	 */
+	public Instance(final Green solver, final Instance source, final Instance parent, final Expression expression) {
+		this.solver = solver;
+		this.source = source;
+		this.parent = parent;
+		this.expression = expression;
+		fullExpression = null;
+		data = new Hashtable<Object, Object>();
+	}
+	
+	public Instance getSource() {
+		return source;
+	}
+
 	public Instance getParent() {
 		return parent;
 	}
-
-	/**
-	 * Returns the expression (= the fresh part of the constraint represented by
-	 * the instance).
-	 * 
-	 * @return the expression
-	 */
+	
 	public Expression getExpression() {
 		return expression;
-	}
-
-	public void setExpression(Expression expression) {
-		this.expression = expression;
 	}
 
 	public Expression getFullExpression() {
@@ -85,39 +58,18 @@ public abstract class Instance {
 		}
 		return fullExpression;
 	}
-
-	public void setFullExpression(Expression expression) {
-		fullExpression = expression;
+	
+	public Object request(String serviceName) {
+		source = this;
+		return solver.handleRequest(serviceName, this);
 	}
 
-	/**
-	 * Returns the data associated with the given service class.
-	 * 
-	 * @param serviceClass
-	 *            the class of the service
-	 * @return the data associated with the service class (may be null)
-	 */
-	public Object getServiceData(Class<? extends Service> serviceClass) {
-		return serviceData.get(serviceClass);
+	public void setData(Object key, Object value) {
+		data.put(key, value);
 	}
 
-	/**
-	 * Sets the data associated with the given service class.
-	 * 
-	 * @param serviceClass
-	 *            the class of the service
-	 * @param data
-	 *            the new data associated with the service class
-	 */
-	public void setServiceData(Class<? extends Service> serviceClass, Object data) {
-		serviceData.put(serviceClass, data);
+	public Object getData(Object key) {
+		return data.get(key);
 	}
-
-	/**
-	 * 
-	 */
-	public Serializable issueRequest(Object request) {
-		return solver.issueRequest(request, this);
-	}
-
+	
 }

@@ -2,9 +2,9 @@ package za.ac.sun.cs.green.expr;
 
 public class IntVariable extends Variable {
 
-	private Integer lowerBound;
+	private final Integer lowerBound;
 
-	private Integer upperBound;
+	private final Integer upperBound;
 
 	public IntVariable(String name, Integer lowerBound, Integer upperBound) {
 		super(name);
@@ -12,6 +12,12 @@ public class IntVariable extends Variable {
 		this.upperBound = upperBound;
 	}
 
+	public IntVariable(String name, Object original, Integer lowerBound, Integer upperBound) {
+		super(name, original);
+		this.lowerBound = lowerBound;
+		this.upperBound = upperBound;
+	}
+	
 	public Integer getLowerBound() {
 		return lowerBound;
 	}

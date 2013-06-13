@@ -2,13 +2,13 @@ package za.ac.sun.cs.green.expr;
 
 public class StringConstant extends Constant {
 
-	private String value;
+	private final String value;
 
-	public StringConstant(String value) {
+	public StringConstant(final String value) {
 		this.value = value;
 	}
 
-	public String getValue() {
+	public final String getValue() {
 		return value;
 	}
 

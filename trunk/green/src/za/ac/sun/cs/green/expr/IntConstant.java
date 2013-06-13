@@ -2,13 +2,13 @@ package za.ac.sun.cs.green.expr;
 
 public class IntConstant extends Constant {
 
-	private int value;
+	private final int value;
 
-	public IntConstant(int value) {
+	public IntConstant(final int value) {
 		this.value = value;
 	}
 
-	public int getValue() {
+	public final int getValue() {
 		return value;
 	}
 
