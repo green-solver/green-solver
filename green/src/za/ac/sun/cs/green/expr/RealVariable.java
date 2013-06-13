@@ -2,10 +2,16 @@ package za.ac.sun.cs.green.expr;
 
 public class RealVariable extends Variable {
 
-	private Double lowerBound;
+	private final Double lowerBound;
 
-	private Double upperBound;
+	private final Double upperBound;
 
+	public RealVariable(String name, Object original, Double lowerBound, Double upperBound) {
+		super(name, original);
+		this.lowerBound = lowerBound;
+		this.upperBound = upperBound;
+	}
+	
 	public RealVariable(String name, Double lowerBound, Double upperBound) {
 		super(name);
 		this.lowerBound = lowerBound;

@@ -2,14 +2,26 @@ package za.ac.sun.cs.green.expr;
 
 public abstract class Variable extends Expression {
 
-	private String name;
+	private final String name;
 
-	public Variable(String name) {
+	private final Object original;
+
+	public Variable(final String name) {
 		this.name = name;
+		this.original = null;
+	}
+	
+	public Variable(final String name, final Object original) {
+		this.name = name;
+		this.original = original;
 	}
 
-	public String getName() {
+	public final String getName() {
 		return name;
+	}
+
+	public final Object getOriginal() {
+		return original;
 	}
 
 }

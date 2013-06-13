@@ -123,11 +123,11 @@ public class Operation extends Expression {
 
 	public static final Expression TRUE = new Operation(Operation.Operator.EQ, ZERO, ZERO);
 
-	private Operator operator = null;
+	private final Operator operator;
 
-	private Expression[] operands = null;
+	private final Expression[] operands;
 
-	public Operation(Operator operator, Expression... operands) {
+	public Operation(final Operator operator, Expression... operands) {
 		this.operator = operator;
 		this.operands = operands;
 	}

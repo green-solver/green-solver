@@ -2,13 +2,13 @@ package za.ac.sun.cs.green.expr;
 
 public class RealConstant extends Constant {
 
-	private double value;
+	private final double value;
 
-	public RealConstant(double value) {
+	public RealConstant(final double value) {
 		this.value = value;
 	}
 
-	public double getValue() {
+	public final double getValue() {
 		return value;
 	}
 

@@ -2,6 +2,8 @@ package za.ac.sun.cs.green.store;
 
 import java.io.Serializable;
 
+import za.ac.sun.cs.green.util.Reporter;
+
 /**
  * An interface to a data store that can record various kinds of objects.
  * 
@@ -9,14 +11,18 @@ import java.io.Serializable;
  */
 public interface Store {
 
-	public void report();
-
 	/**
 	 * Shuts down the store. For example, in the case of an SQL database, this
 	 * routine might close the connection.
 	 */
 	public void shutdown();
 
+	/**
+	 * Shuts down the store. For example, in the case of an SQL database, this
+	 * routine might close the connection.
+	 */
+	public void report(Reporter reporter);
+	
 	/**
 	 * Returns an arbitrary object that is associated with the given key. If
 	 * there is nothing associated with the key, the method returns
@@ -27,7 +33,7 @@ public interface Store {
 	 * @return the object that is stored with the key or <code>null</code> if no
 	 *         association is found
 	 */
-	public Serializable get(String key);
+	public Object get(String key);
 
 	/**
 	 * Returns the string that is associated with the given key. If there is
@@ -108,64 +114,5 @@ public interface Store {
 	 */
 	public void put(String key, Serializable value);
 
-	/**
-	 * Associates the given string with the given key.
-	 * 
-	 * @param key
-	 *            the key for the association
-	 * @param value
-	 *            the string for the association
-	 */
-	public void put(String key, String value);
-
-	/**
-	 * Associates the given boolean with the given key.
-	 * 
-	 * @param key
-	 *            the key for the association
-	 * @param value
-	 *            the boolean for the association
-	 */
-	public void put(String key, Boolean value);
-
-	/**
-	 * Associates the given integer with the given key.
-	 * 
-	 * @param key
-	 *            the key for the association
-	 * @param value
-	 *            the integer for the association
-	 */
-	public void put(String key, Integer value);
-
-	/**
-	 * Associates the given <code>long</code> value with the given key.
-	 * 
-	 * @param key
-	 *            the key for the association
-	 * @param value
-	 *            the <code>long</code> value for the association
-	 */
-	public void put(String key, Long value);
-
-	/**
-	 * Associates the given <code>float</code> value with the given key.
-	 * 
-	 * @param key
-	 *            the key for the association
-	 * @param value
-	 *            the <code>float</code> value for the association
-	 */
-	public void put(String key, Float value);
-
-	/**
-	 * Associates the given <code>double</code> value with the given key.
-	 * 
-	 * @param key
-	 *            the key for the association
-	 * @param value
-	 *            the <code>double</code> value for the association
-	 */
-	public void put(String key, Double value);
 
 }
