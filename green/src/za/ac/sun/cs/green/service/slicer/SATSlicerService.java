@@ -67,24 +67,13 @@ public class SATSlicerService extends BasicService {
 
 	@Override
 	public void report(Reporter reporter) {
-		reporter.report(getClass().getName(), "invocations = "
-				+ invocationCount);
-		reporter.report(getClass().getName(), "totalConjuncts = "
-				+ totalConjunctCount);
-		reporter.report(getClass().getName(), "minimalConjuncts = "
-				+ minimalConjunctCount);
-		reporter.report(
-				getClass().getName(),
-				"conjunctReduction = "
-						+ ((totalConjunctCount - minimalConjunctCount) * 100.0D / totalConjunctCount));
-		reporter.report(getClass().getName(), "totalVariables = "
-				+ totalVariableCount);
-		reporter.report(getClass().getName(), "minimalVariables = "
-				+ minimalVariableCount);
-		reporter.report(
-				getClass().getName(),
-				"variableReduction = "
-						+ ((totalVariableCount - minimalVariableCount) * 100.0D / totalVariableCount));
+		reporter.report(getClass().getSimpleName(), "invocations = " + invocationCount);
+		reporter.report(getClass().getSimpleName(), "totalConjuncts = " + totalConjunctCount);
+		reporter.report(getClass().getSimpleName(), "minimalConjuncts = " + minimalConjunctCount);
+		reporter.report(getClass().getSimpleName(), "conjunctReduction = " + ((totalConjunctCount - minimalConjunctCount) * 100.0D / totalConjunctCount));
+		reporter.report(getClass().getSimpleName(), "totalVariables = " + totalVariableCount);
+		reporter.report(getClass().getSimpleName(), "minimalVariables = " + minimalVariableCount);
+		reporter.report(getClass().getSimpleName(), "variableReduction = " + ((totalVariableCount - minimalVariableCount) * 100.0D / totalVariableCount));
 	}
 
 	private Expression slice(Expression fresh, Expression rest) {
