@@ -58,8 +58,8 @@ public class RedisStore extends BasicStore {
 
 	@Override
 	public void report(Reporter reporter) {
-		reporter.report(getClass().getName(), "retrievalCount = " + retrievalCount);
-		reporter.report(getClass().getName(), "insertionCount = " + insertionCount);
+		reporter.report(getClass().getSimpleName(), "retrievalCount = " + retrievalCount);
+		reporter.report(getClass().getSimpleName(), "insertionCount = " + insertionCount);
 	}
 	
 	@Override

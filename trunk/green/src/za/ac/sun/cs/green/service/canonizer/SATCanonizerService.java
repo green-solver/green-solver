@@ -51,7 +51,7 @@ public class SATCanonizerService extends BasicService {
 
 	@Override
 	public void report(Reporter reporter) {
-		reporter.report(getClass().getName(), "invocations = " + invocations);
+		reporter.report(getClass().getSimpleName(), "invocations = " + invocations);
 	}
 
 	private Expression canonize(Expression expression,

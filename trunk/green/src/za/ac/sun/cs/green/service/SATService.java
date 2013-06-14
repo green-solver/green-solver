@@ -24,10 +24,10 @@ public abstract class SATService extends BasicService {
 
 	@Override
 	public void report(Reporter reporter) {
-		reporter.report(getClass().getName(), "invocationCount = " + invocationCount);
-		reporter.report(getClass().getName(), "cacheHitCount = " + cacheHitCount);
-		reporter.report(getClass().getName(), "cacheMissCount = " + cacheMissCount);
-		reporter.report(getClass().getName(), "timeConsumption = " + timeConsumption);
+		reporter.report(getClass().getSimpleName(), "invocationCount = " + invocationCount);
+		reporter.report(getClass().getSimpleName(), "cacheHitCount = " + cacheHitCount);
+		reporter.report(getClass().getSimpleName(), "cacheMissCount = " + cacheMissCount);
+		reporter.report(getClass().getSimpleName(), "timeConsumption = " + timeConsumption);
 	}
 
 	@Override

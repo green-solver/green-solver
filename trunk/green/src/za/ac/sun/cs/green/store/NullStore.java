@@ -17,8 +17,8 @@ public class NullStore extends BasicStore {
 
 	@Override
 	public void report(Reporter reporter) {
-		reporter.report(getClass().getName(), "number of get requests = " + getCount);
-		reporter.report(getClass().getName(), "number of put requests = " + putCount);
+		reporter.report(getClass().getSimpleName(), "getCount = " + getCount);
+		reporter.report(getClass().getSimpleName(), "putCount = " + putCount);
 	}
 
 	@Override
