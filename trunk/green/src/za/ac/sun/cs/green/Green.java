@@ -207,8 +207,7 @@ public class Green {
 	 *            another service to associate with the name
 	 */
 	public void registerService(String serviceName, Service subService) {
-		log.info("register service: name=\"" + serviceName + "\", subservice="
-				+ subService.getClass().getName());
+		log.info("register service: name=\"" + serviceName + "\", subservice=" + subService.getClass().getName());
 		Set<Service> serviceSet = services0.get(serviceName);
 		if (serviceSet == null) {
 			serviceSet = new HashSet<Service>();
@@ -228,8 +227,7 @@ public class Green {
 	 *            another service to associate with the given service
 	 */
 	public void registerService(Service service, Service subService) {
-		log.info("register service: name=\"" + service.getClass().getName()
-				+ "\", subservice=" + subService.getClass().getName());
+		log.info("register service: name=\"" + service.getClass().getName() + "\", subservice=" + subService.getClass().getName());
 		Set<Service> serviceSet = services1.get(service);
 		if (serviceSet == null) {
 			serviceSet = new HashSet<Service>();
@@ -262,7 +260,7 @@ public class Green {
 		report(new Reporter() {
 			@Override
 			public void report(String context, String message) {
-				log.info(message);
+				log.info(context + " :: " + message);
 			}
 		});
 	}
