@@ -22,7 +22,7 @@ public class Instance {
 
 	public Instance(final Green solver, final Instance parent, final Expression expression) {
 		this.solver = solver;
-		this.source = null;
+		this.source = (parent == null) ? null : parent.source;
 		this.parent = parent;
 		this.expression = expression;
 		fullExpression = null;
