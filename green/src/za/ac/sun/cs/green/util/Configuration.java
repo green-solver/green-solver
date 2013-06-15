@@ -37,17 +37,23 @@ public class Configuration {
 	}
 
 	public void configure() {
-		String tm = properties.getProperty("green.taskmanager");
-		if (tm != null) {
-			solver.setTaskManager((TaskManager) createInstance(tm));
+		String p = properties.getProperty("green.taskmanager");
+		if (p != null) {
+			TaskManager tm = (TaskManager) createInstance(p);
+			if (tm != null) {
+				solver.setTaskManager(tm);
+			}
 		}
-		String st = properties.getProperty("green.store");
-		if (st != null) {
-			solver.setStore((Store) createInstance(st));
+		p = properties.getProperty("green.store");
+		if (p != null) {
+			Store st = (Store) createInstance(p);
+			if (st != null) {
+				solver.setStore(st);
+			}
 		}
-		String ss = properties.getProperty("green.services");
-		if (ss != null) {
-			for (String s : ss.split(",")) {
+		p = properties.getProperty("green.services");
+		if (p != null) {
+			for (String s : p.split(",")) {
 				try {
 					configure(s.trim());
 				} catch (ParseException x) {
@@ -80,11 +86,21 @@ public class Configuration {
 	private Object createInstance(String objectName) {
 		Class<?> classx = loadClass(objectName);
 		try {
-			Constructor<?> constructor = classx.getConstructor(Green.class);
-			return constructor.newInstance(solver);
+			Constructor<?> constructor = null;
+			try {
+				constructor = classx.getConstructor(Green.class);
+				return constructor.newInstance(solver);
+			} catch (NoSuchMethodException x) {
+				// ignore
+			}
+			try {
+				constructor = classx.getConstructor(Green.class,
+						Properties.class);
+				return constructor.newInstance(solver, properties);
+			} catch (NoSuchMethodException x) {
+				log.log(Level.SEVERE, "constructor not found: " + objectName, x);
+			}
 		} catch (SecurityException x) {
-			log.log(Level.SEVERE, "constructor not found: " + objectName, x);
-		} catch (NoSuchMethodException x) {
 			log.log(Level.SEVERE, "constructor not found: " + objectName, x);
 		} catch (IllegalArgumentException x) {
 			log.log(Level.SEVERE, "constructor error: " + objectName, x);
@@ -114,7 +130,7 @@ public class Configuration {
 	private class ParseTree {
 
 		private final Service service;
-		
+
 		private final Set<ParseTree> children;
 
 		public ParseTree(final Service service) {
@@ -150,8 +166,9 @@ public class Configuration {
 		private final String rootName;
 
 		private final Scanner scanner;
-		
-		public Parser(final String rootName, final String input) throws ParseException {
+
+		public Parser(final String rootName, final String input)
+				throws ParseException {
 			this.rootName = rootName;
 			scanner = new Scanner(input);
 		}
@@ -159,15 +176,17 @@ public class Configuration {
 		public ParseTree parse() throws ParseException {
 			return parse(null);
 		}
-		
+
 		public ParseTree parse(Service service) throws ParseException {
 			ParseTree t = new ParseTree(service);
-			while ((scanner.next() != Token.EOS) && (scanner.next() != Token.RPAREN)) {
+			while ((scanner.next() != Token.EOS)
+					&& (scanner.next() != Token.RPAREN)) {
 				if (scanner.next() == Token.NAME) {
 					String n = scanner.expectName();
 					Service s = lookup(rootName, n);
 					if (s == null) {
-						throw new ParseException("Unknown service \"" + rootName + "." + n + "\"");
+						throw new ParseException("Unknown service \""
+								+ rootName + "." + n + "\"");
 					}
 					t.addChild(new ParseTree(s));
 				} else if (scanner.next() == Token.LPAREN) {
@@ -175,19 +194,22 @@ public class Configuration {
 					String n = scanner.expectName();
 					Service s = lookup(rootName, n);
 					if (s == null) {
-						throw new ParseException("Unknown service \"" + rootName + "." + n + "\"");
+						throw new ParseException("Unknown service \""
+								+ rootName + "." + n + "\"");
 					}
 					t.addChild(parse(s));
 					scanner.expect(Token.RPAREN); // ')'
 				} else {
-					throw new ParseException("Unexpected token in \"" + scanner.getInput() + "\"");
+					throw new ParseException("Unexpected token in \""
+							+ scanner.getInput() + "\"");
 				}
 			}
 			return t;
 		}
 
 		private Service lookup(String rootName, String serviceName) {
-			String s = properties.getProperty("green.service." + rootName + "." + serviceName);
+			String s = properties.getProperty("green.service." + rootName + "."
+					+ serviceName);
 			if (s != null) {
 				return (Service) createInstance(s);
 			}
@@ -197,25 +219,22 @@ public class Configuration {
 	}
 
 	public enum Token {
-		LPAREN("\"(\""),
-		RPAREN("\")\""),
-		NAME("a name"),
-		EOS("the end of input"),
-		UNKNOWN("an unknown token");
-		
+		LPAREN("\"(\""), RPAREN("\")\""), NAME("a name"), EOS(
+				"the end of input"), UNKNOWN("an unknown token");
+
 		private final String representation;
-		
+
 		private Token(String representation) {
 			this.representation = representation;
 		}
-		
+
 		@Override
 		public String toString() {
 			return representation;
 		}
-		
+
 	}
-	
+
 	private class Scanner {
 
 		private final String input;
@@ -243,7 +262,8 @@ public class Configuration {
 
 		public void expect(Token token) throws ParseException {
 			if (nextToken != token) {
-				throw new ParseException("Expected " + token + " but found " + nextToken + " in \"" + input + "\"");
+				throw new ParseException("Expected " + token + " but found "
+						+ nextToken + " in \"" + input + "\"");
 			}
 			scan();
 		}
@@ -257,7 +277,7 @@ public class Configuration {
 		public Token next() {
 			return nextToken;
 		}
-		
+
 		public void scan() throws ParseException {
 			nextToken = Token.UNKNOWN;
 			while (nextToken == Token.UNKNOWN) {
@@ -280,7 +300,8 @@ public class Configuration {
 					nextName = n.toString();
 					nextToken = Token.NAME;
 				} else {
-					throw new ParseException("Unrecognized token in \"" + input + "\"");
+					throw new ParseException("Unrecognized token in \"" + input
+							+ "\"");
 				}
 			}
 		}
@@ -292,6 +313,6 @@ public class Configuration {
 				nextChar = input.charAt(position++);
 			}
 		}
-		
+
 	}
 }
