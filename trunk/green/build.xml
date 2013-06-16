@@ -107,6 +107,7 @@
                 <exclude name="${junit.dir}"/>
             </fileset>
             <fileset dir="src"/>
+            <fileset dir="test"/>
         </jar>
     </target>
 
