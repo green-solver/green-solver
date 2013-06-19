@@ -1,0 +1,7 @@
+#summary Main page for describing how to use Green
+
+Green can be used in two main ways: as a Java library, or as a server.
+
+  * Using Green from Java
+  * Using the Green server
+  * Configuration
