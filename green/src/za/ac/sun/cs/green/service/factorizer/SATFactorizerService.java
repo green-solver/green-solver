@@ -64,7 +64,7 @@ public class SATFactorizerService extends BasicService {
 			}
 			result = Collections.unmodifiableSet(result);
 			instance.setData(FACTORS, result);
-			instance.setData(FACTORS_UNSOLVED, result);
+			instance.setData(FACTORS_UNSOLVED, new HashSet<Instance>(result));
 
 			System.out.println("Factorize exiting with " + result.size() + " results");
 
@@ -87,7 +87,7 @@ public class SATFactorizerService extends BasicService {
 			unsolved.remove(subinstance);
 			instance.setData(FACTORS_UNSOLVED, unsolved);
 			// Return true of no more unsolved factors; else return null to carry on the computation
-			return (unsolved.isEmpty()) ? result : true; 
+			return (unsolved.isEmpty()) ? result : null; 
 		} else {
 			// We have already solved this subinstance; return null to carry on the computation
 			return null;
