@@ -33,6 +33,7 @@ public class Operation extends Expression {
 		SHIFTL("<<", 2, Fix.INFIX),
 		SHIFTR(">>", 2, Fix.INFIX),
 		SHIFTUR(">>>", 2, Fix.INFIX),
+		BIT_CONCAT("BIT_CONCAT", 2, Fix.PREFIX),
 		SIN("SIN", 1),
 		COS("COS", 1),
 		TAN("TAN", 1),

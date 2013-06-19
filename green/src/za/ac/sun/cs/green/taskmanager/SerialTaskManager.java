@@ -22,38 +22,47 @@ public class SerialTaskManager implements TaskManager {
 		log = solver.getLog();
 	}
 
-	public Object execute(Service parent, Set<Service> services, Set<Instance> instances) {
+	public Object execute(Service parent, Instance parentInstance, Set<Service> services, Set<Instance> instances) {
+		Object result = null;
 		for (Service service : services) {
 			for (Instance instance : instances) {
-				Set<Instance> subproblems = service.processRequest(instance);
-				Object result = null;
-				if ((subproblems != null) && (subproblems.size() > 0)) {
-					Set<Service> subservices = solver.getService(service);
-					if ((subservices != null) && (subservices.size() > 0)) {
-						result = execute(service, subservices, subproblems);
-					} else {
-						result = service.processResponse(instance, result);
-					}
-				} else {
-					result = service.processResponse(instance, result);
-				}
-				if (parent != null) {
-					result = parent.processResponse(instance, result);
-				}
+				result = execute0(parent, parentInstance, service, instance);
 				if (result != null) {
-					return result;
+					break;
 				}
 			}
 		}
-		return null;
+		if (parent != null) {
+			result = parent.allChildrenDone(parentInstance, result);
+		}
+		return result;
 	}
 
+	public Object execute0(Service parent, Instance parentInstance, Service service, Instance instance) {
+		Object result = null;
+		Set<Instance> subinstances = service.processRequest(instance);
+		if ((subinstances != null) && (subinstances.size() > 0)) {
+			Set<Service> subservices = solver.getService(service);
+			if ((subservices != null) && (subservices.size() > 0)) {
+				result = execute(service, instance, subservices, subinstances);
+			} else {
+				result = service.allChildrenDone(instance, result);
+			}
+		} else {
+			result = service.allChildrenDone(instance, result);
+		}
+		if (parent != null) {
+			result = parent.childDone(parentInstance, service, instance, result); 
+		}
+		return result;
+	}
+	
 	@Override
 	public Object process(final String serviceName, final Instance instance) {
 		log.info("processing serviceName=\"" + serviceName + "\"");
 		processedCount++;
-		final Set<Service> service = solver.getService(serviceName);
-		return execute(null, service, Collections.singleton(instance));
+		final Set<Service> services = solver.getService(serviceName);
+		return execute(null, null, services, Collections.singleton(instance));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package za.ac.sun.cs.green.service;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import za.ac.sun.cs.green.Instance;
@@ -28,10 +29,20 @@ public abstract class BasicService implements Service {
 	}
 
 	@Override
-	public Object processResponse(Instance instance, Object result) {
-		return result;
+	public Set<Instance> processRequest(Instance instance) {
+		return null;
 	}
 
+	@Override
+	public Object childDone(Instance instance, Service subService, Instance subInstance, Object result) {
+		return result;
+	}
+	
+	@Override
+	public Object allChildrenDone(Instance instance, Object result) {
+		return result;
+	}
+	
 	@Override
 	public void shutdown() {
 	}

@@ -10,8 +10,10 @@ public interface Service {
 
 	public Set<Instance> processRequest(Instance instance);
 	
-	public Object processResponse(Instance instance, Object result);
+	public Object childDone(Instance instance, Service subService, Instance subInstance, Object result);
 
+	public Object allChildrenDone(Instance instance, Object result);
+	
 	public void shutdown();
 	
 	public void report(Reporter reporter);

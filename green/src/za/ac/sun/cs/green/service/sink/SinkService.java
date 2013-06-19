@@ -18,8 +18,8 @@ public class SinkService extends BasicService {
 	}
 
 	@Override
-	public Object processResponse(Instance instance, Object result) {
+	public Object allChildrenDone(Instance instance, Object result) {
 		return instance;
 	}
-
+	
 }

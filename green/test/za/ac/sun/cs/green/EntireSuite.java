@@ -6,6 +6,7 @@ import org.junit.runners.Suite;
 import za.ac.sun.cs.green.service.canonizer.SATCanonizerTest;
 import za.ac.sun.cs.green.service.choco.SATChocoTest;
 import za.ac.sun.cs.green.service.cvc3.SATCVC3Test;
+import za.ac.sun.cs.green.service.factorizer.SATFactorizerTest;
 import za.ac.sun.cs.green.service.slicer.ParallelSATSlicerTest;
 import za.ac.sun.cs.green.service.slicer.SATSlicerTest;
 import za.ac.sun.cs.green.service.z3.SATZ3Test;
@@ -24,7 +25,8 @@ import za.ac.sun.cs.green.util.SetTaskManagerTest;
 	SATCVC3Test.class,
 	ParallelSATSlicerTest.class,
 	ParallelSATTest.class,
-	SATZ3Test.class
+	SATZ3Test.class,
+	SATFactorizerTest.class
 })
 
 public class EntireSuite {
