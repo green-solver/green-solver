@@ -216,7 +216,7 @@ public class Scanner {
 				} else if (s.equals("array")) {
 					token = Token.ARRAY;
 				} else if (s.equals("AShl")) {
-					token = Token.ASHL;
+					token = Token.ASHR;
 				} else if (s.equals("Concat")) {
 					token = Token.CONCAT;
 				} else if (s.equals("Eq")) {
@@ -226,7 +226,7 @@ public class Scanner {
 				} else if (s.equals("false")) {
 					token = Token.FALSE;
 				} else if (s.equals("LShl")) {
-					token = Token.LSHL;
+					token = Token.LSHR;
 				} else if (s.equals("Mul")) {
 					token = Token.MUL;
 				} else if (s.equals("Ne")) {
