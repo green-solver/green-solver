@@ -31,10 +31,10 @@ public abstract class SATService extends BasicService {
 	}
 
 	@Override
-	public Object processResponse(Instance instance, Object result) {
-		return (Boolean) instance.getData(getClass());
+	public Object allChildrenDone(Instance instance, Object result) {
+		return instance.getData(getClass());
 	}
-
+	
 	@Override
 	public Set<Instance> processRequest(Instance instance) {
 		Boolean result = (Boolean) instance.getData(getClass());

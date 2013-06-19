@@ -39,7 +39,7 @@ public class ParallelTaskManager implements TaskManager {
 		executor = Executors.newCachedThreadPool();
 	}
 
-	public Object execute0(Service parent, Set<Service> services, Set<Instance> instances) throws InterruptedException, ExecutionException {
+	public Object execute(Service parent, Instance parentInstance, Set<Service> services, Set<Instance> instances) throws InterruptedException, ExecutionException {
 		CompletionService<Object> cs = new ExecutorCompletionService<Object>(executor);
 		int n = services.size() * instances.size();
 		if (n > maxSimultaneousThreads) {
@@ -50,7 +50,7 @@ public class ParallelTaskManager implements TaskManager {
 		try {
 			for (Service service : services) {
 				for (Instance instance : instances) {
-					futures.add(cs.submit(new Task(parent, service, instance)));
+					futures.add(cs.submit(new Task(parent, parentInstance, service, instance)));
 					threadsCreated++;
 				}
 			}
@@ -62,6 +62,9 @@ public class ParallelTaskManager implements TaskManager {
 				f.cancel(true);
 			}
 		}
+		if (parent != null) {
+			result = parent.allChildrenDone(parentInstance, result);
+		}
 		return result;
 	}
 
@@ -71,7 +74,7 @@ public class ParallelTaskManager implements TaskManager {
 		log.info("processing serviceName=\"" + serviceName + "\"");
 		final Set<Service> services = solver.getService(serviceName);
 		try {
-			return execute0(null, services, Collections.singleton(instance));
+			return execute(null, null, services, Collections.singleton(instance));
 		} catch (InterruptedException x) {
 			log.log(Level.SEVERE, "interrupted", x);
 		} catch (ExecutionException x) {
@@ -96,12 +99,15 @@ public class ParallelTaskManager implements TaskManager {
 
 		private final Service parent;
 
+		private final Instance parentInstance;
+		
 		private final Service service;
 		
 		private final Instance instance;
 
-		public Task(final Service parent, final Service service, final Instance instance) {
+		public Task(final Service parent, final Instance parentInstance, final Service service, final Instance instance) {
 			this.parent = parent;
+			this.parentInstance = parentInstance;
 			this.service = service;
 			this.instance = instance;
 		}
@@ -109,19 +115,19 @@ public class ParallelTaskManager implements TaskManager {
 		@Override
 		public Object call() throws Exception {
 			Object result = null;
-			Set<Instance> subproblems = service.processRequest(instance);
-			if ((subproblems != null) && (subproblems.size() > 0)) {
+			Set<Instance> subinstances = service.processRequest(instance);
+			if ((subinstances != null) && (subinstances.size() > 0)) {
 				Set<Service> subservices = solver.getService(service);
 				if ((subservices != null) && (subservices.size() > 0)) {
-					result = execute0(service, subservices, subproblems);
+					result = execute(service, instance, subservices, subinstances);
 				} else {
-					result = service.processResponse(instance, result);
+					result = service.allChildrenDone(instance, result);
 				}
 			} else {
-				result = service.processResponse(instance, result);
+				result = service.allChildrenDone(instance, result);
 			}
 			if (parent != null) {
-				result = parent.processResponse(instance, result);
+				result = parent.childDone(parentInstance, service, instance, result); 
 			}
 			return result;
 		}
