@@ -1,14 +1,37 @@
 #summary One-sentence summary of this page.
 
-When a client creates an instance of Green is created, a configuration can be passed to describe the behaviour of the instance.
+Each new instance of Green needs to be told how to "behave".  The easiest way to accomplish this is to pass a `java.util.Properies` file to Green.
 
-= Setting the task manager =
+{{{
+import za.ac.sun.cs.green.Green;
+import za.ac.sun.cs.green.util.Configuration;
+
+Green g = new Green();
+Properties p = new Properties();
+// Load contents of p from file or
+// set them manually
+new Configuration(g, p).configure();
+}}}
+
+The same configuration file will also be passed to all `Service` objects created during set-up.  Each service may pick up on its own properties; the convention is that these start with `green.`.
+
+= Green properties =
+
+Green itself reads the following properties.
+
+== Setting the task manager ==
 
 {{{
 green.taskmanager = <classname>
 }}}
 
-= Setting up services =
+== Setting the store ==
+
+{{{
+green.store = <classname>
+}}}
+
+== Setting up services ==
 
 Green can be configure with any number of services.  An initial setting determines the initial list of services:
 
