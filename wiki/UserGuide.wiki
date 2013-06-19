@@ -2,6 +2,6 @@
 
 Green can be used in two main ways: as a Java library, or as a server.
 
-  * Using Green from Java
-  * Using the Green server
-  * Configuration
+  * UsingGreenFromJava
+  * UsingTheGreenServer
+  * GreenConfiguration
