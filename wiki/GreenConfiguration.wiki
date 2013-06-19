@@ -1,0 +1,29 @@
+#summary One-sentence summary of this page.
+
+When a client creates an instance of Green is created, a configuration can be passed to describe the behaviour of the instance.
+
+= Setting the task manager =
+
+{{{
+green.taskmanager = <classname>
+}}}
+
+= Setting up services =
+
+Green can be configure with any number of services.  An initial setting determines the initial list of services:
+
+{{{
+green.services = service1, service2, service3 ...
+}}}
+
+If a service `serv' has been configured, and an instance `inst' has been created, users can invoke the service by calling
+
+{{{
+Object r = inst.request("serv");
+}}}
+
+The `request' method returns an `java.lang.Object', the exact nature of which depends on the service.  For example, for a satisfiability service, a typical invocation might be
+
+{{{
+Boolean issat = (Boolean) inst.request("sat");
+}}}
