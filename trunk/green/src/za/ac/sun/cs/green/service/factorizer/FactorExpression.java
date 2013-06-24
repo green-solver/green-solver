@@ -17,7 +17,7 @@ import za.ac.sun.cs.green.expr.VisitorException;
  * incrementally updating, i.e., given an extension of a constraint the factors
  * are computed incrementally based on that extension.
  */
-public class FactoredConstraint {
+public class FactorExpression {
 
 	/**
 	 * Factors are sets of mutually dependent expressions. Each such set is
@@ -55,7 +55,7 @@ public class FactoredConstraint {
 	/**
 	 * Create a new empty FactoredConstraint
 	 */
-	public FactoredConstraint() {
+	public FactorExpression() {
 		var2Factor = new HashMap<Set<Variable>, Set<Expression>>();
 		variables = new HashSet<Variable>();
 		conjunctCount = 0;
@@ -73,9 +73,9 @@ public class FactoredConstraint {
 	 * used in this class. Specifically, things like Expressions and Variables
 	 * do not need to be copied.
 	 */
-	public FactoredConstraint(FactoredConstraint base, Expression fresh) {
+	public FactorExpression(FactorExpression base, Expression fresh) {
 		if (base == null) {
-			base = new FactoredConstraint();
+			base = new FactorExpression();
 		}
 
 		// System.out.println("In FactorMap with baseMap "+base);
