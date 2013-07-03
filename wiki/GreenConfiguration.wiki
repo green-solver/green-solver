@@ -33,7 +33,7 @@ green.store = <classname>
 
 == Setting up services ==
 
-Green can be configure with any number of services.  An initial setting determines the initial list of services:
+Green can be configured with any number of services.  An initial setting determines the initial list of services:
 
 {{{
 green.services = <service1>, <service2>, <service3> ...
