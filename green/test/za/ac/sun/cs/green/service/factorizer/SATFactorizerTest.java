@@ -1,11 +1,9 @@
 package za.ac.sun.cs.green.service.factorizer;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
@@ -114,9 +112,9 @@ public class SATFactorizerTest {
 	
 	@Test
 	public void test04() {
-		IntVariable v1 = new IntVariable("v1", 0, 99);
+//		IntVariable v1 = new IntVariable("v1", 0, 99);
 		IntVariable v2 = new IntVariable("v2", 0, 99);
-		Operation o1 = new Operation(Operation.Operator.EQ, v1, v2);
+//		Operation o1 = new Operation(Operation.Operator.EQ, v1, v2);
 		IntVariable v3 = new IntVariable("v3", 0, 99);
 		Operation o2 = new Operation(Operation.Operator.EQ, v2, v3);
 		IntVariable v4 = new IntVariable("v4", 0, 99);
