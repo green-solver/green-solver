@@ -1,21 +1,11 @@
 package za.ac.sun.cs.green.service.slicer;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
-import java.util.logging.Level;
 
-import za.ac.sun.cs.green.Instance;
 import za.ac.sun.cs.green.Green;
+import za.ac.sun.cs.green.Instance;
 import za.ac.sun.cs.green.expr.Expression;
-import za.ac.sun.cs.green.expr.Operation;
-import za.ac.sun.cs.green.expr.Variable;
-import za.ac.sun.cs.green.expr.Visitor;
-import za.ac.sun.cs.green.expr.VisitorException;
 import za.ac.sun.cs.green.service.BasicService;
 import za.ac.sun.cs.green.service.factorizer.FactorExpression;
 import za.ac.sun.cs.green.util.Reporter;
