@@ -1,0 +1,29 @@
+#summary One-sentence summary of this page.
+
+= Installation and basic use =
+
+== 1.1 Download, build == 
+
+How to download the Green source code and produce the `green.jar` file.
+
+ <wiki:video url="http://www.youtube.com/watch?v=B9l_nviDphs" width="360"/>
+
+== 1.2 Basic use ==
+
+How to use Green from your own project.
+
+== 1.3 Storing results ==
+
+How to download and install `redis` as a database for Green results
+
+== 1.4 Additional solvers  ==
+
+How to add additional decision procedures to Green
+
+== 1.5 Green power ==
+
+A more advanced example demonstrates Green's real power and explains the meaning of the output.
+
+== 1.6 Better configuration ==
+
+== 1.7 Other environments ==
