@@ -31,4 +31,8 @@ import za.ac.sun.cs.green.util.SetTaskManagerTest;
 
 public class EntireSuite {
 
+	public static final String Z3_PATH = "lib/macosx/z3";
+
+	public static final String LATTE_PATH = "lib/macosx/z3";
+	
 }
