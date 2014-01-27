@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Properties;
 
 import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,10 +19,21 @@ import za.ac.sun.cs.green.util.Configuration;
 
 public class SATCVC3Test {
 
-	public static Green solver;
+	public static Green solver = null;
 
 	@BeforeClass
 	public static void initialize() {
+		// first we check if CVC3 is available
+		try {
+			System.loadLibrary("libcvc3jni.dylib");
+		} catch (SecurityException x) {
+			Assume.assumeTrue(false);
+			return;
+		} catch (UnsatisfiedLinkError x) {
+			Assume.assumeTrue(false);
+			return;
+		}
+		
 		solver = new Green();
 		Properties props = new Properties();
 		props.setProperty("green.services", "sat");
@@ -38,7 +50,9 @@ public class SATCVC3Test {
 
 	@AfterClass
 	public static void report() {
-		solver.report();
+		if (solver != null) {
+			solver.report();
+		}
 	}
 
 	private void check(Expression expression, Expression parentExpression, boolean expected) {
