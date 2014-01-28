@@ -2,6 +2,8 @@ package za.ac.sun.cs.green.store;
 
 import java.io.Serializable;
 
+import org.apfloat.Apint;
+
 import za.ac.sun.cs.green.util.Reporter;
 
 /**
@@ -103,6 +105,17 @@ public interface Store {
 	 *         <code>null</code> if no association is found
 	 */
 	public Double getDouble(String key);
+
+	/**
+	 * Returns the Apfloat integer that is associated with the given key. If there is
+	 * nothing associated with the key, the method returns <code>null</code>.
+	 * 
+	 * @param key
+	 *            the key to use for the lookup
+	 * @return the integer that is stored with the key or <code>null</code> if
+	 *         no association is found
+	 */
+	public Apint getApfloatInteger(String key);
 
 	/**
 	 * Associates the given serializable value with the given key.

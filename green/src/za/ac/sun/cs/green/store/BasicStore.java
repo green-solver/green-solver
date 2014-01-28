@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
+import org.apfloat.Apint;
+
 import za.ac.sun.cs.green.Green;
 import za.ac.sun.cs.green.util.Base64;
 
@@ -80,6 +82,12 @@ public abstract class BasicStore implements Store {
 	public Double getDouble(String key) {
 		Object value = get(key);
 		return (value instanceof Double) ? (Double) value : null;
+	}
+
+	@Override
+	public Apint getApfloatInteger(String key) {
+		Object value = get(key);
+		return (value instanceof Apint) ? (Apint) value : null;
 	}
 
 }
