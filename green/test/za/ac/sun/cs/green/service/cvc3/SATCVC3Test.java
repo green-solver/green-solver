@@ -9,6 +9,7 @@ import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import cvc3.ValidityChecker;
 import za.ac.sun.cs.green.Instance;
 import za.ac.sun.cs.green.Green;
 import za.ac.sun.cs.green.expr.Expression;
@@ -23,13 +24,7 @@ public class SATCVC3Test {
 
 	@BeforeClass
 	public static void initialize() {
-		// first we check if CVC3 is available
-		try {
-			System.loadLibrary("libcvc3jni.dylib");
-		} catch (SecurityException x) {
-			Assume.assumeTrue(false);
-			return;
-		} catch (UnsatisfiedLinkError x) {
+		if (!checkCVC3Presence()) {
 			Assume.assumeTrue(false);
 			return;
 		}
@@ -46,6 +41,17 @@ public class SATCVC3Test {
 				"za.ac.sun.cs.green.service.cvc3.SATCVC3Service");
 		Configuration config = new Configuration(solver, props);
 		config.configure();
+	}
+
+	private static boolean checkCVC3Presence() {
+		try {
+			ValidityChecker.create();
+		} catch (SecurityException x) {
+			return false;
+		} catch (UnsatisfiedLinkError x) {
+			return false;
+		}
+		return true;
 	}
 
 	@AfterClass
