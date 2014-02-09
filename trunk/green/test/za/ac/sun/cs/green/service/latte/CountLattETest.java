@@ -84,6 +84,12 @@ public class CountLattETest {
 		check(expression, null, expected);
 	}
 	
+	/**
+	 * Problem:
+	 *   1 * aa == 0
+	 * Count:
+	 *   1
+	 */
 	@Test
 	public void test01() {
 		IntConstant a = new IntConstant(1);
@@ -94,6 +100,13 @@ public class CountLattETest {
 		check(o, new Apint(1));
 	}
 
+	/**
+	 * Problem:
+	 *   1 * aa > 0
+	 *   1 * aa + -10 < 0
+	 * Count:
+	 *   9
+	 */
 	@Test
 	public void test02() {
 		IntConstant zz = new IntConstant(0);
@@ -111,6 +124,13 @@ public class CountLattETest {
 		check(o, new Apint(9));
 	}
 	
+	/**
+	 * Problem:
+	 *   3 * aa + -6 > 0
+	 *   1 * aa + -10 < 0
+	 * Count:
+	 *   7
+	 */
 	@Test
 	public void test03() {
 		IntConstant zz = new IntConstant(0);
@@ -130,19 +150,41 @@ public class CountLattETest {
 		check(o, new Apint(7));
 	}
 
+	/**
+	 * Problem:
+	 *   1 * aa + -1 * bb < 0
+	 *   1 * aa + 1 > 0
+	 *   1 * aa + -10 < 0
+	 *   1 * bb + 1 > 0
+	 *   1 * bb + -10 < 0
+	 * Count:
+	 *   45
+	 */
 	@Test
 	public void test04() {
 		IntConstant zero = new IntConstant(0);
 		IntConstant one = new IntConstant(1);
 		IntConstant minone = new IntConstant(-1);
+		IntConstant minten = new IntConstant(-10);
 		IntVariable aa = new IntVariable("aa", 0, 9);
 		IntVariable bb = new IntVariable("bb", 0, 9);
 
-		Operation taa = new Operation(Operation.Operator.MUL, one, aa);
-		Operation tbb = new Operation(Operation.Operator.MUL, minone, bb);
+		Operation plusaa = new Operation(Operation.Operator.MUL, one, aa);
+		Operation plusbb = new Operation(Operation.Operator.MUL, one, bb);
+		Operation minbb = new Operation(Operation.Operator.MUL, minone, bb);
 
-		Operation o1 = new Operation(Operation.Operator.ADD, taa, tbb);
-		Operation o = new Operation(Operation.Operator.LT, o1, zero);
+		Operation oab1 = new Operation(Operation.Operator.ADD, plusaa, minbb);
+		Operation oab = new Operation(Operation.Operator.LT, oab1, zero);
+		Operation oa1 = new Operation(Operation.Operator.GT, new Operation(Operation.Operator.ADD, plusaa, one), zero);
+		Operation oa2 = new Operation(Operation.Operator.LT, new Operation(Operation.Operator.ADD, plusaa, minten), zero);
+		Operation ob1 = new Operation(Operation.Operator.GT, new Operation(Operation.Operator.ADD, plusbb, one), zero);
+		Operation ob2 = new Operation(Operation.Operator.LT, new Operation(Operation.Operator.ADD, plusbb, minten), zero);
+
+		Operation o3 = new Operation(Operation.Operator.AND, oab, oa1);
+		Operation o2 = new Operation(Operation.Operator.AND, o3, oa2);
+		Operation o1 = new Operation(Operation.Operator.AND, o2, ob1);
+		Operation o = new Operation(Operation.Operator.AND, o1, ob2);
+
 		check(o, new Apint(45));
 	}
 	
