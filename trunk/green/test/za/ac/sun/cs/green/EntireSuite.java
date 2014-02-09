@@ -3,6 +3,7 @@ package za.ac.sun.cs.green;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import za.ac.sun.cs.green.service.bounder.BounderTest;
 import za.ac.sun.cs.green.service.canonizer.SATCanonizerTest;
 import za.ac.sun.cs.green.service.choco.SATChocoTest;
 import za.ac.sun.cs.green.service.cvc3.SATCVC3Test;
@@ -28,7 +29,8 @@ import za.ac.sun.cs.green.util.SetTaskManagerTest;
 	ParallelSATTest.class,
 	SATZ3Test.class,
 	SATFactorizerTest.class,
-	CountLattETest.class
+	CountLattETest.class,
+	BounderTest.class
 })
 
 public class EntireSuite {
