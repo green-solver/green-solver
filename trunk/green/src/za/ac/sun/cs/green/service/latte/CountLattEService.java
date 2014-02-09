@@ -21,6 +21,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apfloat.Apint;
 
@@ -630,6 +631,11 @@ public class CountLattEService extends CountService {
 				executor.setWorkingDirectory(new File(DIRNAME));
 				executor.execute(CommandLine.parse(latteCommand));
 				result = outputStream.toString();
+			} catch (ExecuteException e) {
+				System.out.println("LattECounter : caught " + e.getClass()
+						+ " while executing " + FILENAME);
+				e.printStackTrace();
+				throw new RuntimeException();
 			} catch (IOException e) {
 				System.out.println("LattECounter : caught " + e.getClass()
 						+ " while executing " + FILENAME);
