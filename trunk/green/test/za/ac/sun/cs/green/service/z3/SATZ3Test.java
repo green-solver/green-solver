@@ -2,12 +2,20 @@ package za.ac.sun.cs.green.service.z3;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import za.ac.sun.cs.green.EntireSuite;
 import za.ac.sun.cs.green.Instance;
 import za.ac.sun.cs.green.Green;
 import za.ac.sun.cs.green.expr.Expression;
@@ -22,6 +30,10 @@ public class SATZ3Test {
 
 	@BeforeClass
 	public static void initialize() {
+		if (!checkZ3Presence()) {
+			Assume.assumeTrue(false);
+			return;
+		}
 		solver = new Green();
 		Properties props = new Properties();
 		props.setProperty("green.services", "sat");
@@ -32,14 +44,32 @@ public class SATZ3Test {
 				"za.ac.sun.cs.green.service.canonizer.SATCanonizerService");
 		props.setProperty("green.service.sat.z3",
 				"za.ac.sun.cs.green.service.z3.SATZ3Service");
-		props.setProperty("green.z3.path", "lib/macosx/z3");
+		props.setProperty("green.z3.path", EntireSuite.Z3_PATH);
 		Configuration config = new Configuration(solver, props);
 		config.configure();
 	}
 
+	private static boolean checkZ3Presence() {
+		final String DIRNAME = System.getProperty("java.io.tmpdir");
+		String result = "";
+		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			DefaultExecutor executor = new DefaultExecutor();
+			executor.setStreamHandler(new PumpStreamHandler(outputStream));
+			executor.setWorkingDirectory(new File(DIRNAME));
+			executor.execute(CommandLine.parse(EntireSuite.Z3_PATH + " -h"));
+			result = outputStream.toString();
+		} catch (IOException e) {
+			return false;
+		}
+		return result.startsWith("Z3 [version ");
+	}
+
 	@AfterClass
 	public static void report() {
-		solver.report();
+		if (solver != null) {
+			solver.report();
+		}
 	}
 
 	private void check(Expression expression, Expression parentExpression,
