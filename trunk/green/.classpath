@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="lib/junit_4.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/choco-solver-2.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/jedis-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/apfloat.jar"/>
+	<classpathentry kind="lib" path="lib/commons-exec-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
