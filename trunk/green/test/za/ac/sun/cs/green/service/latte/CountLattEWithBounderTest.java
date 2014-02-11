@@ -161,4 +161,26 @@ public class CountLattEWithBounderTest {
 		check(o, new Apint(45));
 	}
 	
+	/**
+	 * Problem:
+	 *   x >= 0
+	 *   y >= 0
+	 *   z >= 0
+	 * Count:
+	 *   1000
+	 */
+	@Test
+	public void test06() {
+		IntConstant zero = new IntConstant(0);
+		IntVariable x = new IntVariable("x", -10, 10);
+		IntVariable y = new IntVariable("y", -10, 10);
+		IntVariable z = new IntVariable("z", -10, 10);
+		Operation o1 = new Operation(Operation.Operator.GE, x, zero);
+		Operation o2 = new Operation(Operation.Operator.GE, y, zero);
+		Operation o3 = new Operation(Operation.Operator.GE, z, zero);
+		Operation o4 = new Operation(Operation.Operator.AND, o1, o2);
+		Operation o = new Operation(Operation.Operator.AND, o3, o4);
+		check(o, new Apint(1331));
+	}
+	
 }
