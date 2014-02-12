@@ -21,10 +21,12 @@
     <property name="junit.dir" value="bin/junit"/>
     <property name="jar.file" value="green.jar"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
     <path id="green.classpath">
         <pathelement location="${output.dir}"/>
+        <pathelement location="lib/apfloat.jar"/>
+        <pathelement location="lib/commons-exec-1.2.jar"/>
         <pathelement location="lib/junit_4.8.2.jar"/>
         <pathelement location="lib/org.hamcrest.core_1.1.0.jar"/>
         <pathelement location="lib/choco-solver-2.1.3.jar"/>
