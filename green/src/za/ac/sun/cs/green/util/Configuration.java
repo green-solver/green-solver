@@ -37,7 +37,15 @@ public class Configuration {
 	}
 
 	public void configure() {
-		String p = properties.getProperty("green.taskmanager");
+		String p = properties.getProperty("green.log.level");
+		if (p != null) {
+			try {
+				log.setLevel(Level.parse(p));
+			} catch (IllegalArgumentException x) {
+				log.log(Level.SEVERE, "log level error", x);
+			}
+		}
+		p = properties.getProperty("green.taskmanager");
 		if (p != null) {
 			TaskManager tm = (TaskManager) createInstance(p);
 			if (tm != null) {
