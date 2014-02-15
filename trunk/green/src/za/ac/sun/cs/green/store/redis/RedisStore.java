@@ -2,12 +2,13 @@ package za.ac.sun.cs.green.store.redis;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Properties;
 import java.util.logging.Level;
 
 import redis.clients.jedis.Jedis;
-
 import za.ac.sun.cs.green.Green;
 import za.ac.sun.cs.green.store.BasicStore;
+import za.ac.sun.cs.green.util.Configuration;
 import za.ac.sun.cs.green.util.Reporter;
 
 /**
@@ -38,13 +39,33 @@ public class RedisStore extends BasicStore {
 	private int insertionCount = 0;
 
 	/**
+	 * The default host of the redis server.
+	 */
+	private final String DEFAULT_REDIS_HOST = "localhost";
+
+	/**
+	 * Options passed to the LattE executable.
+	 */
+	private final int DEFAULT_REDIS_PORT = 6379;
+	
+	/**
 	 * Constructor to create a default connection to a redis store running on the local computer.
 	 */
 	public RedisStore(Green solver) {
 		super(solver);
-		db = new Jedis("localhost", 6379, TIMEOUT);
+		db = new Jedis(DEFAULT_REDIS_HOST, DEFAULT_REDIS_PORT, TIMEOUT);
 	}
 
+	/**
+	 * Constructor to create a default connection to a redis store running on the local computer.
+	 */
+	public RedisStore(Green solver, Properties properties) {
+		super(solver);
+		String h = properties.getProperty("green.redis.host", DEFAULT_REDIS_HOST);
+		int p = Configuration.getIntegerProperty(properties, "green.redis.port", DEFAULT_REDIS_PORT);
+		db = new Jedis(h, p, TIMEOUT);
+	}
+	
 	/**
 	 * Constructor to create a connection to a redis store given the host and the port.
 	 * 
