@@ -91,6 +91,16 @@ public class Configuration {
 		}
 	}
 
+	public static int getIntegerProperty(Properties properties, String key, int defaultValue) {
+		String s = properties.getProperty(key, Integer.toString(defaultValue));
+		try {
+			return Integer.parseInt(s);
+		} catch (NumberFormatException x) {
+			// Ignore
+		}
+		return defaultValue;
+	}
+
 	private Object createInstance(String objectName) {
 		Class<?> classx = loadClass(objectName);
 		try {
