@@ -51,14 +51,6 @@ public class RedisStore extends BasicStore {
 	/**
 	 * Constructor to create a default connection to a redis store running on the local computer.
 	 */
-	public RedisStore(Green solver) {
-		super(solver);
-		db = new Jedis(DEFAULT_REDIS_HOST, DEFAULT_REDIS_PORT, TIMEOUT);
-	}
-
-	/**
-	 * Constructor to create a default connection to a redis store running on the local computer.
-	 */
 	public RedisStore(Green solver, Properties properties) {
 		super(solver);
 		String h = properties.getProperty("green.redis.host", DEFAULT_REDIS_HOST);
