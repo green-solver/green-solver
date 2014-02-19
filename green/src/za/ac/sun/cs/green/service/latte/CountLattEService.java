@@ -6,15 +6,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -38,12 +41,31 @@ public class CountLattEService extends CountService {
 	/**
 	 * Directory where the LattE output file numOFLatticePoints is stored.
 	 */
-	private static final String DIRNAME = System.getProperty("java.io.tmpdir");
+	private static final String DIRECTORY = System.getProperty("java.io.tmpdir");
+
+	private static final String DATE = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS").format(new Date());
+	
+	private static final int RANDOM = new Random().nextInt(9);
+
+	private static final String DIRNAME = String.format("%s/%s%s", DIRECTORY, DATE, RANDOM);
+
+	private static String directory = null;
+
+	static {
+		File d = new File(DIRNAME);
+		if (!d.exists()) {
+			if (d.mkdir()) {
+				directory = DIRNAME;
+			} else {
+				directory = DIRECTORY;
+			}
+		}
+	}
 
 	/**
 	 * File where the LattE input is stored.
 	 */
-	private static final String FILENAME = DIRNAME + "probsymbc-LattE.in";
+	private static final String FILENAME = directory + "/probsymbc-LattE.in";
 
 	/**
 	 * Pattern that identifies the answer from LattE.
@@ -628,7 +650,7 @@ public class CountLattEService extends CountService {
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 				DefaultExecutor executor = new DefaultExecutor();
 				executor.setStreamHandler(new PumpStreamHandler(outputStream));
-				executor.setWorkingDirectory(new File(DIRNAME));
+				executor.setWorkingDirectory(new File(directory));
 				executor.execute(CommandLine.parse(latteCommand));
 				result = outputStream.toString();
 			} catch (ExecuteException e) {
@@ -643,7 +665,7 @@ public class CountLattEService extends CountService {
 				throw new RuntimeException();
 			}
 			// Process LattE's output from the file
-			final String RESULTS_FILENAME = DIRNAME + "/numOfLatticePoints";
+			final String RESULTS_FILENAME = directory + "/numOfLatticePoints";
 			String resultFromFile = null;
 			try {
 				BufferedReader inputFile = new BufferedReader(new FileReader(
