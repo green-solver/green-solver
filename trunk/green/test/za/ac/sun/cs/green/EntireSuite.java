@@ -3,6 +3,8 @@ package za.ac.sun.cs.green;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import za.ac.sun.cs.green.parser.smtlib2.SMTLIB2Parser0Test;
+import za.ac.sun.cs.green.parser.smtlib2.SMTLIB2Scanner0Test;
 import za.ac.sun.cs.green.service.bounder.BounderTest;
 import za.ac.sun.cs.green.service.canonizer.SATCanonizerTest;
 import za.ac.sun.cs.green.service.choco.SATChocoTest;
@@ -32,7 +34,9 @@ import za.ac.sun.cs.green.util.SetTaskManagerTest;
 	SATFactorizerTest.class,
 	CountLattETest.class,
 	CountLattEWithBounderTest.class,
-	BounderTest.class
+	BounderTest.class,
+	SMTLIB2Scanner0Test.class,
+	SMTLIB2Parser0Test.class
 })
 
 public class EntireSuite {

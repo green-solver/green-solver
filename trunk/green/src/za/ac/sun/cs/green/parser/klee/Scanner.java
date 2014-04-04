@@ -3,6 +3,9 @@ package za.ac.sun.cs.green.parser.klee;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.logging.Logger;
+
+import za.ac.sun.cs.green.util.NullLogger;
 
 public class Scanner {
 
@@ -34,9 +37,15 @@ public class Scanner {
 	/**
 	 * The reader where characters are read from.
 	 */
-	private Reader reader = null;
+	private final Reader reader;
 
-	public Scanner(Reader reader) throws ParseException {
+	/**
+	 * For logging debugging messages.
+	 */
+	private final Logger log;
+
+	public Scanner(Reader reader, Logger log) throws ParseException {
+		this.log = log;
 		this.reader = reader;
 		token = Token.UNKNOWN;
 		intValue = -1;
@@ -45,7 +54,12 @@ public class Scanner {
 		scanNextToken();
 	}
 
-	public Scanner(String query) throws ParseException {
+	public Scanner(Reader reader) throws ParseException {
+		this(reader, new NullLogger());
+	}
+	
+	public Scanner(String query, Logger log) throws ParseException {
+		this.log = log;
 		reader = new StringReader(query);
 		token = Token.UNKNOWN;
 		intValue = -1;
@@ -54,6 +68,10 @@ public class Scanner {
 		scanNextToken();
 	}
 
+	public Scanner(String query) throws ParseException {
+		this(query, new NullLogger());
+	}
+	
 	/**
 	 * Returns the next token in the token stream.
 	 * 
@@ -182,9 +200,9 @@ public class Scanner {
 						if (Character.isDigit(nextCh)) {
 							intValue = intValue * 16 + nextCh - '0';
 						} else if ((nextCh >= 'a') && (nextCh <= 'f')) {
-							intValue = intValue * 16 + nextCh - 'a';
+							intValue = intValue * 16 + 10 + nextCh - 'a';
 						} else if ((nextCh >= 'A') && (nextCh <= 'F')) {
-							intValue = intValue * 16 + nextCh - 'A';
+							intValue = intValue * 16 + 10 + nextCh - 'A';
 						}
 						readNextCh();
 					}
@@ -293,6 +311,7 @@ public class Scanner {
 				throw new ParseException("unrecognized character \"" + ((char) nextCh) + "\"");
 			}
 		}
+		log.finest("token== " + token);
 	}
 
 	private void readNextCh() throws ParseException {
