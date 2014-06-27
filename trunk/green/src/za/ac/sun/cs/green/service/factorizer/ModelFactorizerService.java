@@ -17,8 +17,10 @@ public class ModelFactorizerService extends BasicService {
 
 	private static final String FACTORS = "FACTORS";
 
-	private static final String FACTORS_UNSOLVED = "FACTORS_UNSOLVED";
+	private static final String MODELS = "MODELS";
 	
+	private static final String FACTORS_UNSOLVED = "FACTORS_UNSOLVED";
+			
 	/**
 	 * Number of times the slicer has been invoked.
 	 */
@@ -67,6 +69,8 @@ public class ModelFactorizerService extends BasicService {
 			result = Collections.unmodifiableSet(result);
 			instance.setData(FACTORS, result);
 			instance.setData(FACTORS_UNSOLVED, new HashSet<Instance>(result));
+			
+			instance.setData(MODELS, new HashMap<Variable,Object>());			
 
 			System.out.println("Factorize exiting with " + result.size() + " results");
 
@@ -75,32 +79,25 @@ public class ModelFactorizerService extends BasicService {
 		}
 		return result;
 	}
-
-	//Keep the complete results map
-	HashMap<Variable,Object> results = new HashMap<Variable,Object>();
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object childDone(Instance instance, Service subservice, Instance subinstance, Object result) {
-		results.putAll((HashMap<Variable,Object>)result);
 		HashSet<Instance> unsolved = (HashSet<Instance>) instance.getData(FACTORS_UNSOLVED);
 		if (unsolved.contains(subinstance)) {
+			// new child finished
+			HashMap<Variable,Object> parent_solutions = (HashMap<Variable,Object>) instance.getData(MODELS);  
+			parent_solutions.putAll((HashMap<Variable,Object>)result);
+			instance.setData(MODELS, parent_solutions);
 			// Remove the subinstance now that it is solved 
 			unsolved.remove(subinstance);
 			instance.setData(FACTORS_UNSOLVED, unsolved);
 			// Return true of no more unsolved factors; else return null to carry on the computation
-			return (unsolved.isEmpty()) ? result : null; 
+			return (unsolved.isEmpty()) ? parent_solutions : null; 
 		} else {
 			// We have already solved this subinstance; return null to carry on the computation
 			return null;
 		}
-	}
-
-	@Override
-	public Object allChildrenDone(Instance instance, Object result) {
-		HashMap<Variable,Object> temp = results;
-		results = new HashMap<Variable,Object>(); // must clear otherwise it stays for future calls
-		return temp;
 	}
 	
 	@Override
