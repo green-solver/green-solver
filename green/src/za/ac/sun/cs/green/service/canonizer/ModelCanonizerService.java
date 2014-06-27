@@ -13,12 +13,12 @@ import za.ac.sun.cs.green.expr.Variable;
 
 public class ModelCanonizerService extends SATCanonizerService {
 
+	private static final String RENAME = "RENAME";
+	
 	public ModelCanonizerService(Green solver) {
 		super(solver);
 	}
 
-	Map<Variable, Variable> reverseMap = new HashMap<Variable, Variable>();
-	
 	private Map<Variable, Variable> reverseMap(Map<Variable, Variable> map) {
 		Map<Variable, Variable> revMap = new HashMap<Variable, Variable>();
 		for (Map.Entry<Variable,Variable> m : map.entrySet()) {
@@ -34,36 +34,29 @@ public class ModelCanonizerService extends SATCanonizerService {
 		if (result == null) {
 			final Map<Variable, Variable> map = new HashMap<Variable, Variable>();
 			final Expression e = canonize(instance.getFullExpression(), map);
-			reverseMap = reverseMap(map);
+			Map<Variable, Variable> reverseMap = reverseMap(map);
 			final Instance i = new Instance(getSolver(), instance.getSource(), null, e);
 			result = Collections.singleton(i);
 			instance.setData(getClass(), result);
+			instance.setData(RENAME, reverseMap);
 		}
 		return result;
 	}
 
-	// not sure this is required
-	//Keep the complete results map
-	HashMap<Variable,Object> results = new HashMap<Variable,Object>();
-		
 	@Override
 	public Object childDone(Instance instance, Service subService,
 			Instance subInstance, Object result) {
 		@SuppressWarnings("unchecked")
 		HashMap<Variable,Object> r = (HashMap<Variable,Object>)result;
+		
+		@SuppressWarnings("unchecked")
+		HashMap<Variable, Variable> reverseMap = (HashMap<Variable, Variable>)instance.getData(RENAME);
+		
 		HashMap<Variable,Object> newResult = new HashMap<Variable,Object>();
 		for (Map.Entry<Variable,Object> m : r.entrySet()) {
 			newResult.put(reverseMap.get(m.getKey()), m.getValue());
 		}
-		results.putAll(newResult);
 		return newResult;
 	}
 	
-	@Override
-	public Object allChildrenDone(Instance instance, Object result) {
-		HashMap<Variable,Object> temp = results;
-		results = new HashMap<Variable,Object>();
-		return temp;
-	}
-
 }
