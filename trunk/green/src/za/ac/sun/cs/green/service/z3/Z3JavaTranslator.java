@@ -41,6 +41,7 @@ class Z3JavaTranslator extends Visitor {
 
 	public BoolExpr getTranslation() {
 		BoolExpr result = (BoolExpr)stack.pop();
+		/* not required due to Bounder being used
 		for (BoolExpr expr : domains) {
 			try {
 				result = context.mkAnd(result,expr);
@@ -48,6 +49,7 @@ class Z3JavaTranslator extends Visitor {
 				e.printStackTrace();
 			}
 		}
+		*/
 		return result;
 	}
 	
