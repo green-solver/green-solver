@@ -1,6 +1,10 @@
 package za.ac.sun.cs.green.expr;
 
-public abstract class Variable extends Expression {
+import java.io.Serializable;
+
+public abstract class Variable extends Expression implements Serializable {
+
+	private static final long serialVersionUID = -1712398155778326862L;
 
 	private final String name;
 
