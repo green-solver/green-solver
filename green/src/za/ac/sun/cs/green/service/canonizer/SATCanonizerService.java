@@ -54,7 +54,7 @@ public class SATCanonizerService extends BasicService {
 		reporter.report(getClass().getSimpleName(), "invocations = " + invocations);
 	}
 
-	private Expression canonize(Expression expression,
+	public Expression canonize(Expression expression,
 			Map<Variable, Variable> map) {
 		try {
 			invocations++;
