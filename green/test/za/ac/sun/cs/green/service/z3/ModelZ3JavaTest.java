@@ -27,7 +27,9 @@ public class ModelZ3JavaTest {
 		Properties props = new Properties();
 		//green.store = za.ac.sun.cs.green.store.redis.RedisStore
 		props.setProperty("green.services", "model");
-		props.setProperty("green.service.model", "z3java");
+		props.setProperty("green.service.model", "(bounder z3java)");
+		props.setProperty("green.service.model.bounder", "za.ac.sun.cs.green.service.bounder.BounderService");
+				
 		props.setProperty("green.service.model.z3java",
 				"za.ac.sun.cs.green.service.z3.ModelZ3JavaService");
 		//props.setProperty("green.store", "za.ac.sun.cs.green.store.redis.RedisStore");
