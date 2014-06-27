@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 import java.util.Properties;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -24,13 +25,13 @@ public class ComplexModelFactorizerTest {
 
 	
 	private static Properties setupNoCanon(Properties props) {
-		props.setProperty("green.service.model", "(factor z3)");
+		props.setProperty("green.service.model", "(bounder (factor z3))");
 		props.setProperty("green.service.model.factor", "za.ac.sun.cs.green.service.factorizer.ModelFactorizerService");
 		return props;
 	}
 	
 	private static Properties setupWithCanon(Properties props) {
-		props.setProperty("green.service.model", "(factor (canonize z3))");
+		props.setProperty("green.service.model", "(bounder (factor (canonize z3)))");
 		props.setProperty("green.service.model.factor", "za.ac.sun.cs.green.service.factorizer.ModelFactorizerService");
 		props.setProperty("green.service.model.canonize", "za.ac.sun.cs.green.service.canonizer.ModelCanonizerService");
 		return props;
@@ -43,12 +44,20 @@ public class ComplexModelFactorizerTest {
 		Properties props = new Properties();
 		props.setProperty("green.services", "model");
 		props = setupWithCanon(props);
+		props.setProperty("green.service.model.bounder", "za.ac.sun.cs.green.service.bounder.BounderService");
 		props.setProperty("green.service.model.z3", "za.ac.sun.cs.green.service.z3.ModelZ3JavaService");
 		props.setProperty("green.z3.path", "/Users/willemvisser/Documents/tools/z3/bin/z3");
+		props.setProperty("green.store", "za.ac.sun.cs.green.store.redis.RedisStore");
 		Configuration config = new Configuration(solver, props);
 		config.configure();
 	}
 
+	@AfterClass
+	public static void report() {
+		solver.report();
+	}
+
+	
 	private void check(Expression expression, Expression parentExpression,
 			boolean expected) {
 		Instance p = (parentExpression == null) ? null : new Instance(solver,
