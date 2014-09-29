@@ -31,6 +31,7 @@
         <pathelement location="lib/org.hamcrest.core_1.1.0.jar"/>
         <pathelement location="lib/choco-solver-2.1.3.jar"/>
         <pathelement location="lib/libcvc3.jar"/>
+        <pathelement location="lib/com.microsoft.z3.jar"/>
         <pathelement location="lib/jedis-2.0.0.jar"/>
     </path>
 
