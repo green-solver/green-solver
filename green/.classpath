@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="lib/jedis-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/apfloat.jar"/>
 	<classpathentry kind="lib" path="lib/commons-exec-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/com.microsoft.z3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
