@@ -6,10 +6,14 @@
 	<classpathentry kind="lib" path="lib/libcvc3.jar"/>
 	<classpathentry kind="lib" path="lib/org.hamcrest.core_1.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/junit_4.8.2.jar"/>
+	<classpathentry kind="lib" path="/home/lawrence/workspace/green/lib/choco-solver-3.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/choco-solver-2.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jedis-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jedis-2.0.0.jar" sourcepath="lib/jedis-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/apfloat.jar"/>
 	<classpathentry kind="lib" path="lib/commons-exec-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/com.microsoft.z3.jar"/>
+	<classpathentry kind="lib" path="/home/lawrence/workspace/green/lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="/home/lawrence/workspace/green/lib/slf4j-simple-1.7.12.jar"/>
+	<classpathentry kind="lib" path="/home/lawrence/workspace/green/lib/trove-3.1a1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
