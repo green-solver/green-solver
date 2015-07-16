@@ -21,6 +21,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -88,11 +89,19 @@ public class CountLattEService extends CountService {
 	 */
 	private final String latteCommand;
 
+	/**
+	 * Logger.
+	 */
+	private Logger log;
+
 	public CountLattEService(Green solver, Properties properties) {
 		super(solver);
+		log = solver.getLog();
 		String p = properties.getProperty("green.latte.path", DEFAULT_LATTE_PATH);
 		String a = properties.getProperty("green.latte.args", DEFAULT_LATTE_ARGS);
 		latteCommand = p + ' ' + a + ' ' + FILENAME;
+		log.finer("latteCommand=" + latteCommand);
+		log.finer("directory=" + directory);
 	}
 
 	@Override
@@ -651,6 +660,7 @@ public class CountLattEService extends CountService {
 				DefaultExecutor executor = new DefaultExecutor();
 				executor.setStreamHandler(new PumpStreamHandler(outputStream));
 				executor.setWorkingDirectory(new File(directory));
+				executor.setExitValues(null);
 				executor.execute(CommandLine.parse(latteCommand));
 				result = outputStream.toString();
 			} catch (ExecuteException e) {
