@@ -2,6 +2,8 @@ package za.ac.sun.cs.green.expr;
 
 public class IntVariable extends Variable {
 
+	private static final long serialVersionUID = 8942503924718973792L;
+
 	private final Integer lowerBound;
 
 	private final Integer upperBound;

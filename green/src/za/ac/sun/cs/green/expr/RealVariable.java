@@ -2,6 +2,8 @@ package za.ac.sun.cs.green.expr;
 
 public class RealVariable extends Variable {
 
+	private static final long serialVersionUID = -8815803703741978839L;
+
 	private final Double lowerBound;
 
 	private final Double upperBound;
