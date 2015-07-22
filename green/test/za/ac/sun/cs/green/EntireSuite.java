@@ -1,5 +1,9 @@
 package za.ac.sun.cs.green;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -41,8 +45,25 @@ import za.ac.sun.cs.green.util.SetTaskManagerTest;
 
 public class EntireSuite {
 
-	public static final String Z3_PATH = "/your/path/to/executable/z3";
+	public static final String Z3_PATH;
 
-	public static final String LATTE_PATH = "/your/path/to/executable/latte/count";
+	public static final String LATTE_PATH;
+
+	static {
+		String z3 = null, latte = null;
+		InputStream is = EntireSuite.class.getClassLoader().getResourceAsStream("build.properties");
+		if (is != null) {
+			Properties p = new Properties();
+			try {
+				p.load(is);
+				z3 = p.getProperty("z3path");
+				latte = p.getProperty("lattepath");
+			} catch (IOException e) {
+				// do nothing
+			}
+		}
+		Z3_PATH = z3;
+		LATTE_PATH = latte;
+	}
 
 }

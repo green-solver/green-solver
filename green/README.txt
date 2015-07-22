@@ -4,7 +4,7 @@ Green
 
 Notes:
 
-(1) To run unit tests, update test/za.ac.sun.cs.green.EntireSuite.java
-    to point to your z3 and latte executables.  Otherwise, those tests
-    are skipped.
+(1) The first step is to update "build.properties" with your local
+    settings.  You do not need to set z3 and latte, but in that case
+    some unit tests won't run.
    

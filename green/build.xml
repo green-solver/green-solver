@@ -16,9 +16,9 @@
     Settings
 -->
 
-    <include file="settings.xml"/>
-    <property environment="env"/>
+    <loadproperties srcFile="build.properties"/>
     <property name="output.dir" value="bin"/>
+    <property environment="env"/>
     <property name="junit.dir" value="bin/junit"/>
     <property name="jar.file" value="green.jar"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -49,6 +49,7 @@
 
     <target name="init">
         <mkdir dir="${output.dir}"/>
+        <copy file="build.properties" todir="${output.dir}"/>
         <copy includeemptydirs="false" todir="${output.dir}">
             <fileset dir="src">
                 <exclude name="**/*.java"/>
