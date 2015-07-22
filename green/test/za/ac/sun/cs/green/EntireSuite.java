@@ -1,12 +1,18 @@
 package za.ac.sun.cs.green;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import cvc3.ValidityChecker;
 import za.ac.sun.cs.green.parser.smtlib2.SMTLIB2Parser0Test;
 import za.ac.sun.cs.green.parser.smtlib2.SMTLIB2Scanner0Test;
 import za.ac.sun.cs.green.service.bounder.BounderTest;
@@ -49,6 +55,10 @@ public class EntireSuite {
 
 	public static final String LATTE_PATH;
 
+	public static final boolean HAS_CVC3;
+
+	public static final boolean HAS_Z3;
+	
 	static {
 		String z3 = null, latte = null;
 		InputStream is = EntireSuite.class.getClassLoader().getResourceAsStream("build.properties");
@@ -64,6 +74,35 @@ public class EntireSuite {
 		}
 		Z3_PATH = z3;
 		LATTE_PATH = latte;
+		HAS_CVC3 = checkCVC3Presence();
+		HAS_Z3 = checkZ3Presence();
+	}
+
+	private static boolean checkCVC3Presence() {
+		try {
+			ValidityChecker.create();
+		} catch (SecurityException x) {
+			return false;
+		} catch (UnsatisfiedLinkError x) {
+			return false;
+		}
+		return true;
+	}
+
+	private static boolean checkZ3Presence() {
+		final String DIRNAME = System.getProperty("java.io.tmpdir");
+		String result = "";
+		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			DefaultExecutor executor = new DefaultExecutor();
+			executor.setStreamHandler(new PumpStreamHandler(outputStream));
+			executor.setWorkingDirectory(new File(DIRNAME));
+			executor.execute(CommandLine.parse(EntireSuite.Z3_PATH + " -h"));
+			result = outputStream.toString();
+		} catch (IOException e) {
+			return false;
+		}
+		return result.startsWith("Z3 [version ");
 	}
 
 }

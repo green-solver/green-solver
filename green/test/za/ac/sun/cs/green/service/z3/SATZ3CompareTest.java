@@ -22,7 +22,6 @@ import za.ac.sun.cs.green.expr.Expression;
 import za.ac.sun.cs.green.expr.IntConstant;
 import za.ac.sun.cs.green.expr.IntVariable;
 import za.ac.sun.cs.green.expr.Operation;
-import za.ac.sun.cs.green.taskmanager.ParallelTaskManager;
 import za.ac.sun.cs.green.util.Configuration;
 
 public class SATZ3CompareTest {
@@ -37,7 +36,6 @@ public class SATZ3CompareTest {
 		}
 		solver = new Green();
 		Properties props = new Properties();
-		//props.setProperty("green.taskmanager", ParallelTaskManager.class.getCanonicalName());
 		props.setProperty("green.services", "sat");
 		props.setProperty("green.service.sat", "(bounder z3b)");
 		props.setProperty("green.service.sat.bounder", "za.ac.sun.cs.green.service.bounder.BounderService");

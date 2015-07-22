@@ -9,7 +9,7 @@ import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import cvc3.ValidityChecker;
+import za.ac.sun.cs.green.EntireSuite;
 import za.ac.sun.cs.green.Instance;
 import za.ac.sun.cs.green.Green;
 import za.ac.sun.cs.green.expr.Expression;
@@ -24,7 +24,7 @@ public class SATCVC3Test {
 
 	@BeforeClass
 	public static void initialize() {
-		if (!checkCVC3Presence()) {
+		if (!EntireSuite.HAS_CVC3) {
 			Assume.assumeTrue(false);
 			return;
 		}
@@ -41,17 +41,6 @@ public class SATCVC3Test {
 				"za.ac.sun.cs.green.service.cvc3.SATCVC3Service");
 		Configuration config = new Configuration(solver, props);
 		config.configure();
-	}
-
-	private static boolean checkCVC3Presence() {
-		try {
-			ValidityChecker.create();
-		} catch (SecurityException x) {
-			return false;
-		} catch (UnsatisfiedLinkError x) {
-			return false;
-		}
-		return true;
 	}
 
 	@AfterClass
