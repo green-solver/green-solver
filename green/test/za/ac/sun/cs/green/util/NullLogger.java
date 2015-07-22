@@ -52,6 +52,8 @@ public class NullLogger extends Logger {
 			String msg, Throwable thrown) {
 	}
 	
+	/* Following methods have been deprecated:
+
 	@Override
 	public void logrb(Level level, String sourceClass, String sourceMethod,
 			String bundleName, String msg) {
@@ -71,6 +73,7 @@ public class NullLogger extends Logger {
 	public void logrb(Level level, String sourceClass, String sourceMethod,
 			String bundleName, String msg, Throwable thrown) {
 	}
+	*/
 	
 	@Override
 	public void entering(String sourceClass, String sourceMethod) {
