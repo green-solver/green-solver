@@ -41,8 +41,8 @@ import za.ac.sun.cs.green.util.SetTaskManagerTest;
 
 public class EntireSuite {
 
-	public static final String Z3_PATH = "/Users/jaco/Documents/RESEARCH/GREEN/z3";
+	public static final String Z3_PATH = "/your/path/to/executable/z3";
 
-	//public static final String LATTE_PATH = "/Users/jaco/Documents/RESEARCH/GREEN/count";
-	public static final String LATTE_PATH = "/home/lawrence/Downloads/latte-integrale-1.6-x86_64-unknown-linux-gnu/bin/count";
+	public static final String LATTE_PATH = "/your/path/to/executable/latte/count";
+
 }
