@@ -19,7 +19,6 @@ import com.microsoft.z3.ArithExpr;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
-import com.microsoft.z3.IntNum;
 import com.microsoft.z3.Z3Exception;
 
 class Z3JavaTranslator extends Visitor {
