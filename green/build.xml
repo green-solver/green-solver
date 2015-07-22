@@ -38,6 +38,11 @@
         <pathelement location="lib/com.microsoft.z3.jar"/>
         <pathelement location="lib/jedis-2.0.0.jar"/>
     </path>
+    <path id="green.srcpath">
+    	<pathelement location="src"/>
+    	<pathelement location="test"/>
+    </path>
+    <property name="green.srcpath" refid="green.srcpath"/>
 
 <!--
     Initialization
@@ -73,11 +78,11 @@
 
     <target name="build" depends="init">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" source="${source}" target="${target}" includeantruntime="false">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" sourcepath="${green.srcpath}" source="${source}" target="${target}" includeantruntime="false">
             <src path="src"/>
             <classpath refid="green.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" source="${source}" target="${target}" includeantruntime="false">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" sourcepath="${green.srcpath}" source="${source}" target="${target}" includeantruntime="false">
             <src path="test"/>
             <classpath refid="green.classpath"/>
         </javac>
