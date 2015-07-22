@@ -16,13 +16,12 @@
     Settings
 -->
 
+    <include file="settings.xml"/>
     <property environment="env"/>
     <property name="output.dir" value="bin"/>
     <property name="junit.dir" value="bin/junit"/>
     <property name="jar.file" value="green.jar"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.7"/>
-    <property name="source" value="1.7"/>
     <path id="green.classpath">
         <pathelement location="${output.dir}"/>
         <pathelement location="lib/apfloat.jar"/>
@@ -43,7 +42,7 @@
     	<pathelement location="test"/>
     </path>
     <property name="green.srcpath" refid="green.srcpath"/>
-
+    
 <!--
     Initialization
 -->
@@ -77,12 +76,12 @@
 -->
 
     <target name="build" depends="init">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" sourcepath="${green.srcpath}" source="${source}" target="${target}" includeantruntime="false">
+    	<!-- <echo message="${ant.project.name}: ${ant.file}"/> -->
+        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" sourcepath="${green.srcpath}" source="${source}" target="${target}" bootclasspath="${bootpath}" includeantruntime="false">
             <src path="src"/>
             <classpath refid="green.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" sourcepath="${green.srcpath}" source="${source}" target="${target}" includeantruntime="false">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="${output.dir}" sourcepath="${green.srcpath}" source="${source}" target="${target}" bootclasspath="${bootpath}" includeantruntime="false">
             <src path="test"/>
             <classpath refid="green.classpath"/>
         </javac>
