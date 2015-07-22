@@ -32,7 +32,6 @@ public class SATChocoTest {
 				"za.ac.sun.cs.green.service.canonizer.SATCanonizerService");
 		props.setProperty("green.service.sat.choco",
 				"za.ac.sun.cs.green.service.choco.SATChocoService");
-		props.setProperty("green.store", "za.ac.sun.cs.green.store.redis.RedisStore");
 		Configuration config = new Configuration(solver, props);
 		config.configure();
 	}
