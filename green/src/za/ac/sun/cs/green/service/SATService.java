@@ -17,6 +17,10 @@ public abstract class SATService extends BasicService {
 	private int cacheMissCount = 0;
 	
 	private long timeConsumption = 0;
+	
+	private int satCount = 0;
+	private int unsatCount = 0;
+	
 
 	public SATService(Green solver) {
 		super(solver);
@@ -28,6 +32,8 @@ public abstract class SATService extends BasicService {
 		reporter.report(getClass().getSimpleName(), "cacheHitCount = " + cacheHitCount);
 		reporter.report(getClass().getSimpleName(), "cacheMissCount = " + cacheMissCount);
 		reporter.report(getClass().getSimpleName(), "timeConsumption = " + timeConsumption);
+		reporter.report(getClass().getSimpleName(), "SAT queries = " + satCount);
+		reporter.report(getClass().getSimpleName(), "UNSAT queries = " + unsatCount);
 	}
 
 	@Override
@@ -44,6 +50,10 @@ public abstract class SATService extends BasicService {
 				instance.setData(getClass(), result);
 			}
 		}
+		if (result.booleanValue())
+			satCount++; 
+		else 	
+			unsatCount++;
 		return null;
 	}
 
