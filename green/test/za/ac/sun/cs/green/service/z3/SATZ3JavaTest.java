@@ -2,14 +2,8 @@ package za.ac.sun.cs.green.service.z3;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.BeforeClass;
@@ -30,7 +24,7 @@ public class SATZ3JavaTest {
 
 	@BeforeClass
 	public static void initialize() {
-		if (!checkZ3Presence()) {
+		if (!EntireSuite.HAS_Z3JAVA) {
 			Assume.assumeTrue(false);
 			return;
 		}
@@ -47,22 +41,6 @@ public class SATZ3JavaTest {
 		props.setProperty("green.z3.path", EntireSuite.Z3_PATH);
 		Configuration config = new Configuration(solver, props);
 		config.configure();
-	}
-
-	private static boolean checkZ3Presence() {
-		final String DIRNAME = System.getProperty("java.io.tmpdir");
-		String result = "";
-		try {
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			DefaultExecutor executor = new DefaultExecutor();
-			executor.setStreamHandler(new PumpStreamHandler(outputStream));
-			executor.setWorkingDirectory(new File(DIRNAME));
-			executor.execute(CommandLine.parse(EntireSuite.Z3_PATH + " -h"));
-			result = outputStream.toString();
-		} catch (IOException e) {
-			return false;
-		}
-		return result.startsWith("Z3 [version ");
 	}
 
 	@AfterClass

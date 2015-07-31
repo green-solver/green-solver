@@ -23,7 +23,7 @@ public class SATZ3JavaService extends SATService {
 	public SATZ3JavaService(Green solver, Properties properties) {
 		super(solver);
 		HashMap<String, String> cfg = new HashMap<String, String>();
-        cfg.put("model", "true");
+        cfg.put("model", "false");
 		try{
 			ctx = new Context(cfg);		 
 		} catch (Exception e) {

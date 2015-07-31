@@ -3,14 +3,8 @@ package za.ac.sun.cs.green.service.latte;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.apfloat.Apint;
 import org.junit.AfterClass;
 import org.junit.Assume;
@@ -32,7 +26,7 @@ public class CountLattETest {
 
 	@BeforeClass
 	public static void initialize() {
-		if (!checkLattEPresence()) {
+		if (!EntireSuite.HAS_LATTE) {
 			Assume.assumeTrue(false);
 			return;
 		}		
@@ -45,23 +39,6 @@ public class CountLattETest {
 		props.setProperty("green.latte.path", EntireSuite.LATTE_PATH);
 		Configuration config = new Configuration(solver, props);
 		config.configure();
-	}
-
-	private static boolean checkLattEPresence() {
-		final String DIRNAME = System.getProperty("java.io.tmpdir");
-		// System.out.println(">>> LATTE DIRNAME: " + DIRNAME);
-		String result = "";
-		try {
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			DefaultExecutor executor = new DefaultExecutor();
-			executor.setStreamHandler(new PumpStreamHandler(outputStream));
-			executor.setWorkingDirectory(new File(DIRNAME));
-			executor.execute(CommandLine.parse(EntireSuite.LATTE_PATH));
-			result = outputStream.toString();
-		} catch (IOException e) {
-			return false;
-		}
-		return result.startsWith("This is LattE integrale");
 	}
 
 	@AfterClass
