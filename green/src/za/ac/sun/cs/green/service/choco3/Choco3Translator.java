@@ -38,6 +38,7 @@ class Choco3Translator extends Visitor {
 	private List<Constraint> constraints = null;
 
 	private Map<Variable, IntVar> variableMap = null;
+	private int TMPidx = 0;
 
 	public Choco3Translator(Solver choco3Solver, Map<Variable, IntVar> variableMap) {
 		this.choco3Solver = choco3Solver;
@@ -100,7 +101,7 @@ class Choco3Translator extends Visitor {
 		case EQ:
 			if (l instanceof Integer) {
 				//stack.push(choco.Choco.eq((Integer) l, (IntegerExpressionVariable) r));
-				stack.push(IntConstraintFactory.arithm((IntVar) r, "=", (Integer) l));
+				stack.push(IntConstraintFactory.arithm((IntVar) r, "=", (Integer) l));					
 			} else if (r instanceof Integer) {
 				//stack.push(choco.Choco.eq((IntegerExpressionVariable) l, (Integer) r));
 				stack.push(IntConstraintFactory.arithm((IntVar) l, "=", (Integer) r));
@@ -180,30 +181,63 @@ class Choco3Translator extends Visitor {
 		case ADD:
 			if (l instanceof Integer) {
 				//stack.push(choco.Choco.plus((Integer) l, (IntegerExpressionVariable) r));
-				stack.push(IntConstraintFactory.arithm((IntVar) r, "+", (Integer) l));
+				//stack.push(IntConstraintFactory.arithm((IntVar) r, "+", (Integer) l));
+				stack.push(VariableFactory.offset((IntVar)r,(Integer)l));
 			} else if (r instanceof Integer) {
 				//stack.push(choco.Choco.plus((IntegerExpressionVariable) l, (Integer) r));
-				stack.push(IntConstraintFactory.arithm((IntVar) l, "+", (Integer) r));
+				//stack.push(IntConstraintFactory.arithm((IntVar) l, "+", (Integer) r));
+				stack.push(VariableFactory.offset((IntVar)l,(Integer)r));
 			} else {
 				//stack.push(choco.Choco.plus((IntegerExpressionVariable) l, (IntegerExpressionVariable) r));
-				stack.push(IntConstraintFactory.arithm((IntVar) l, "+", (IntVar) r));
+				IntVar left = (IntVar)l;
+				IntVar right = (IntVar)r;
+				int lower = Math.min(left.getLB(), right.getLB());
+				int upper = Math.max(left.getUB(), right.getUB());				
+				IntVar v = VariableFactory.bounded("temp"+TMPidx++,lower,upper, choco3Solver);
+				System.out.println("ADD v = " + v);
+				IntVar[] vars = new IntVar[2];
+				vars[0] = left; vars[1] = right;
+				choco3Solver.post(IntConstraintFactory.sum(vars,v));
+				stack.push(v);
+				//stack.push(IntConstraintFactory.arithm((IntVar) l, "+", (IntVar) r));
+				//stack.push(VariableFactory.offset((IntVar)r,(IntVar)l));
 			}
 			break;
 		case SUB:
 			if (l instanceof Integer) {
 				//stack.push(choco.Choco.minus((Integer) l, (IntegerExpressionVariable) r));
-				stack.push(IntConstraintFactory.arithm(VariableFactory.minus((IntVar) r), "+", (Integer) l));
+				//stack.push(IntConstraintFactory.arithm(VariableFactory.minus((IntVar) r), "+", (Integer) l));
+				stack.push(VariableFactory.offset(VariableFactory.minus((IntVar)r), (Integer)l));
 			} else if (r instanceof Integer) {
 				//stack.push(choco.Choco.minus((IntegerExpressionVariable) l, (Integer) r));
-				stack.push(IntConstraintFactory.arithm((IntVar) l, "-", (Integer) r));
+				//stack.push(IntConstraintFactory.arithm((IntVar) l, "-", (Integer) r));
+				stack.push(VariableFactory.offset((IntVar)l,-1*(Integer)r));
 			} else {
 				//stack.push(choco.Choco.minus((IntegerExpressionVariable) l, (IntegerExpressionVariable) r));
-				stack.push(IntConstraintFactory.arithm((IntVar) l, "-", (IntVar) r));
+				//stack.push(IntConstraintFactory.arithm((IntVar) l, "-", (IntVar) r));
+				IntVar left = (IntVar)l;
+				IntVar right = (IntVar)r;
+				int lower = Math.min(left.getLB(), right.getLB());
+				int upper = Math.max(left.getUB(), right.getUB());				
+				IntVar v = VariableFactory.bounded("temp"+TMPidx++,lower,upper, choco3Solver);
+				System.out.println("SUB v = " + v);
+				IntVar[] vars = new IntVar[2];
+				vars[0] = left; vars[1] = VariableFactory.minus(right); //left + -right
+				choco3Solver.post(IntConstraintFactory.sum(vars,v));
+				stack.push(v);
 			}
 			break;
 		case MUL:
 			//stack.push(choco.Choco.mult((Integer) l, (IntegerExpressionVariable) r));
-			stack.push(VariableFactory.scale((IntVar) r, (Integer) l));
+			if ((Integer)l >= 0)
+				stack.push(VariableFactory.scale((IntVar) r, (Integer) l));
+			else { // case where l < 0
+				System.out.println(" value of l is negative " + l);
+				IntVar v = VariableFactory.bounded("temp"+TMPidx++,-((IntVar)r).getUB(),((IntVar)r).getUB(), choco3Solver);
+				System.out.println("MUL v = " + v);
+				choco3Solver.post(IntConstraintFactory.times((IntVar)r, (Integer)l, v));
+				stack.push(v);
+			}
 			break;
 		default:
 			throw new TranslatorUnsupportedOperation("unsupported operation " + operation.getOperator());

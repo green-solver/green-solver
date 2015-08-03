@@ -32,6 +32,7 @@ public class SATChoco3Service extends SATService {
 			new Choco3Translator(choco3Solver, variableMap).translate(instance.getExpression());
 			//CPSolver chocoSolver = new CPSolver();
 			//chocoSolver.read(chocoModel);
+			System.out.println(choco3Solver);
 			return choco3Solver.findSolution();
 		} catch (TranslatorUnsupportedOperation x) {
 			log.log(Level.WARNING, x.getMessage(), x);
