@@ -146,6 +146,7 @@ public class EntireSuite {
 		} catch (Exception x) {
 			return false;
 		} catch (UnsatisfiedLinkError x) {
+			x.printStackTrace();
 			return false;
 		}
 		return true;
