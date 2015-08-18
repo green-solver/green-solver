@@ -38,6 +38,7 @@ public class SATFactorizerService extends BasicService {
 
 	@Override
 	public Set<Instance> processRequest(Instance instance) {
+		invocationCount++;
 		@SuppressWarnings("unchecked")
 		Set<Instance> result = (Set<Instance>) instance.getData(FACTORS);
 		if (result == null) {
@@ -58,7 +59,7 @@ public class SATFactorizerService extends BasicService {
 
 			result = new HashSet<Instance>();
 			for (Expression e : fc.getFactors()) {
-				System.out.println("Factorizer computes instance for :" + e);
+				log.info("Factorizer computes instance for :" + e);
 				final Instance i = new Instance(getSolver(), instance.getSource(), null, e);
 				result.add(i);
 			}
@@ -66,7 +67,7 @@ public class SATFactorizerService extends BasicService {
 			instance.setData(FACTORS, result);
 			instance.setData(FACTORS_UNSOLVED, new HashSet<Instance>(result));
 
-			System.out.println("Factorize exiting with " + result.size() + " results");
+			log.info("Factorize exiting with " + result.size() + " results");
 
 			constraintCount += 1;
 			factorCount += fc.getNumFactors();
@@ -86,14 +87,25 @@ public class SATFactorizerService extends BasicService {
 			// Remove the subinstance now that it is solved 
 			unsolved.remove(subinstance);
 			instance.setData(FACTORS_UNSOLVED, unsolved);
-			// Return true of no more unsolved factors; else return null to carry on the computation
+			// Return true if no more unsolved factors; else return null to carry on the computation
 			return (unsolved.isEmpty()) ? result : null; 
 		} else {
 			// We have already solved this subinstance; return null to carry on the computation
 			return null;
 		}
 	}
+	
 
+	@Override
+	public Object allChildrenDone(Instance instance, Object result) {
+		HashSet<Instance> unsolved = (HashSet<Instance>) instance.getData(FACTORS_UNSOLVED);
+		if (unsolved.size() >= 1 && result == null) {
+			log.severe("Unsolved Factors but result is null -> concurrency bug");
+			result = true;
+		}
+		return result;
+	}
+	
 	@Override
 	public void report(Reporter reporter) {
 		reporter.report(getClass().getSimpleName(), "invocations = " + invocationCount);

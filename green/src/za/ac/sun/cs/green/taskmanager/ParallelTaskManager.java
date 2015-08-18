@@ -64,6 +64,8 @@ public class ParallelTaskManager implements TaskManager {
 		}
 		if (parent != null) {
 			result = parent.allChildrenDone(parentInstance, result);
+			if (result == null)
+				log.severe("Should never happen! Got AllChildrenDone in PTM with NULL result");
 		}
 		return result;
 	}

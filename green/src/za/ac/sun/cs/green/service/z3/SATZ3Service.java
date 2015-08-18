@@ -48,6 +48,7 @@ public class SATZ3Service extends SATSMTLIBService {
 		} else if (output.equals("unsat")) {
 			return false;
 		} else {
+			log.severe("Z3 returned a null" + output) ;
 			return null;
 		}
 	}
