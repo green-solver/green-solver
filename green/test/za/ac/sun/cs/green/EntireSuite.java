@@ -55,6 +55,8 @@ public class EntireSuite {
 
 	public static final String LATTE_PATH;
 
+	public static final String BARVINOK_PATH;
+
 	public static final String Z3_PATH;
 
 	public static final boolean HAS_CVC3;
@@ -66,7 +68,7 @@ public class EntireSuite {
 	public static final boolean HAS_Z3JAVA;
 
 	static {
-		String latte = null, z3 = null;
+		String latte = null, z3 = null, barvinok = null;
 		InputStream is = EntireSuite.class.getClassLoader()
 				.getResourceAsStream("build.properties");
 		if (is != null) {
@@ -74,12 +76,14 @@ public class EntireSuite {
 			try {
 				p.load(is);
 				latte = p.getProperty("lattepath");
+				barvinok = p.getProperty("barvinokpath");
 				z3 = p.getProperty("z3path");
 			} catch (IOException e) {
 				// do nothing
 			}
 		}
 		LATTE_PATH = latte;
+		BARVINOK_PATH = barvinok;
 		Z3_PATH = z3;
 		HAS_CVC3 = checkCVC3Presence();
 		HAS_LATTE = checkLattEPresence();
