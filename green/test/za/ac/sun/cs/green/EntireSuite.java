@@ -122,7 +122,7 @@ public class EntireSuite {
 			x.printStackTrace();
 			return false;
 		}
-		return result.startsWith("This is LattE integrale");
+		return result.trim().startsWith("This is LattE integrale");
 	}
 
 	private static boolean checkZ3Presence() {
