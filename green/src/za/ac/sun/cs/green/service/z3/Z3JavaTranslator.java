@@ -40,7 +40,8 @@ class Z3JavaTranslator extends Visitor {
 
 	public BoolExpr getTranslation() {
 		BoolExpr result = (BoolExpr)stack.pop();
-		/* not required due to Bounder being used
+		/* not required due to Bounder being used */
+		/* not sure why this was commented out, it is clearly wrong, with or without bounder */
 		for (BoolExpr expr : domains) {
 			try {
 				result = context.mkAnd(result,expr);
@@ -48,7 +49,7 @@ class Z3JavaTranslator extends Visitor {
 				e.printStackTrace();
 			}
 		}
-		*/
+		/* was end of old comment */
 		return result;
 	}
 	

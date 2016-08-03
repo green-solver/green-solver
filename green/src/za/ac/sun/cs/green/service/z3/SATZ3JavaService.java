@@ -19,9 +19,52 @@ public class SATZ3JavaService extends SATService {
 	
 	Context ctx;
 	Solver Z3solver;
+	Z3Wrapper z3Wrapper;
+	
+	private static class Z3Wrapper {
+		private Context ctx;
+		private Solver solver;
+
+		private static Z3Wrapper instance = null;
+
+		public static Z3Wrapper getInstance() {
+			if (instance != null) {
+				return instance;
+			}
+			return instance = new Z3Wrapper();
+		}
+
+		private Z3Wrapper() {			
+			HashMap<String, String> cfg = new HashMap<String, String>();
+	        cfg.put("model", "true"); //"true" ?
+			try{
+				ctx = new Context(cfg);		 
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("## Error Z3: Exception caught in Z3 JNI: \n" + e);
+		    }
+			solver = ctx.mkSolver();
+		}
+
+		public Solver getSolver() {
+			return this.solver;
+		}
+
+		public Context getCtx() {
+			return this.ctx;
+		}
+	}
+
+	
 	
 	public SATZ3JavaService(Green solver, Properties properties) {
 		super(solver);
+		
+		Z3Wrapper z3Wrapper = Z3Wrapper.getInstance();
+		Z3solver = z3Wrapper.getSolver();
+		ctx = z3Wrapper.getCtx();
+		
+		/*
 		HashMap<String, String> cfg = new HashMap<String, String>();
         cfg.put("model", "false");
 		try{
@@ -30,6 +73,7 @@ public class SATZ3JavaService extends SATService {
 			e.printStackTrace();
 			throw new RuntimeException("## Error Z3: Exception caught in Z3 JNI: \n" + e);
 	    }
+	    */
 	}
 
 	@Override
@@ -46,7 +90,8 @@ public class SATZ3JavaService extends SATService {
 		BoolExpr expr = translator.getTranslation();
 		// model should now be in ctx
 		try {
-			Z3solver = ctx.mkSolver();
+			//Z3solver = ctx.mkSolver();
+			Z3solver.push();
 			Z3solver.add(expr);
 		} catch (Z3Exception e1) {
 			log.log(Level.WARNING, "Error in Z3"+e1.getMessage());
@@ -60,6 +105,11 @@ public class SATZ3JavaService extends SATService {
 			}
 		} catch (Z3Exception e) {
 			log.log(Level.WARNING, "Error in Z3"+e.getMessage());
+		}
+		// clean up
+		int scopes = Z3solver.getNumScopes();
+		if (scopes > 0) {
+			Z3solver.pop(scopes);
 		}
 		return result;
 	}
