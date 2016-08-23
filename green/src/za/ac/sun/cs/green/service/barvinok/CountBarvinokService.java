@@ -696,7 +696,11 @@ public class CountBarvinokService extends CountService {
 			int lastSpace = result.lastIndexOf(' ');
 			int secondLastSpace = result.substring(0, lastSpace).lastIndexOf(' ');
 			result = result.substring(secondLastSpace+1, lastSpace);
-			//System.out.println(result);
+			int newlineIndex = result.indexOf("\n");
+			if (newlineIndex != -1) {
+				result = result.substring(newlineIndex+1);
+				//System.out.println(result);
+			}
 			return result;
 		}
 
