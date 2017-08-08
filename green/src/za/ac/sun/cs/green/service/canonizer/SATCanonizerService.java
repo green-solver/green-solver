@@ -384,30 +384,32 @@ public class SATCanonizerService extends BasicService {
 			case LE:
 			case GT:
 			case GE:
-				Expression e = merge(scale(-1, stack.pop()), stack.pop());
-				if (e instanceof IntConstant) {
-					int v = ((IntConstant) e).getValue();
-					boolean b = true;
-					if (op == Operation.Operator.EQ) {
-						b = v == 0;
-					} else if (op == Operation.Operator.NE) {
-						b = v != 0;
-					} else if (op == Operation.Operator.LT) {
-						b = v < 0;
-					} else if (op == Operation.Operator.LE) {
-						b = v <= 0;
-					} else if (op == Operation.Operator.GT) {
-						b = v > 0;
-					} else if (op == Operation.Operator.GE) {
-						b = v >= 0;
-					}
-					if (b) {
-						stack.push(Operation.TRUE);
+				if (!stack.isEmpty()) {
+					Expression e = merge(scale(-1, stack.pop()), stack.pop());
+					if (e instanceof IntConstant) {
+						int v = ((IntConstant) e).getValue();
+						boolean b = true;
+						if (op == Operation.Operator.EQ) {
+							b = v == 0;
+						} else if (op == Operation.Operator.NE) {
+							b = v != 0;
+						} else if (op == Operation.Operator.LT) {
+							b = v < 0;
+						} else if (op == Operation.Operator.LE) {
+							b = v <= 0;
+						} else if (op == Operation.Operator.GT) {
+							b = v > 0;
+						} else if (op == Operation.Operator.GE) {
+							b = v >= 0;
+						}
+						if (b) {
+							stack.push(Operation.TRUE);
+						} else {
+							unsatisfiable = true;
+						}
 					} else {
-						unsatisfiable = true;
+						stack.push(new Operation(op, e, Operation.ZERO));
 					}
-				} else {
-					stack.push(new Operation(op, e, Operation.ZERO));
 				}
 				break;
 			case ADD:
@@ -417,22 +419,60 @@ public class SATCanonizerService extends BasicService {
 				stack.push(merge(scale(-1, stack.pop()), stack.pop()));
 				break;
 			case MUL:
-				Expression r = stack.pop();
-				Expression l = stack.pop();
-				if ((l instanceof IntConstant) && (r instanceof IntConstant)) {
-					int li = ((IntConstant) l).getValue();
-					int ri = ((IntConstant) r).getValue();
-					stack.push(new IntConstant(li * ri));
-				} else if (l instanceof IntConstant) {
-					int li = ((IntConstant) l).getValue();
-					stack.push(scale(li, r));
-				} else if (r instanceof IntConstant) {
-					int ri = ((IntConstant) r).getValue();
-					stack.push(scale(ri, l));
-				} else {
-					stack.clear();
-					linearInteger = false;
+				if (stack.size() >= 2) {
+					Expression r = stack.pop();
+					Expression l = stack.pop();
+					if ((l instanceof IntConstant) && (r instanceof IntConstant)) {
+						int li = ((IntConstant) l).getValue();
+						int ri = ((IntConstant) r).getValue();
+						stack.push(new IntConstant(li * ri));
+					} else if (l instanceof IntConstant) {
+						int li = ((IntConstant) l).getValue();
+						stack.push(scale(li, r));
+					} else if (r instanceof IntConstant) {
+						int ri = ((IntConstant) r).getValue();
+						stack.push(scale(ri, l));
+					} else {
+						stack.clear();
+						linearInteger = false;
+					}
 				}
+				break;
+			case NOT:
+				if (!stack.isEmpty()) {
+					Expression e = stack.pop();
+					if (e instanceof Operation) {
+						Operation o = (Operation) e;
+						switch (o.getOperator()) {
+						case EQ:
+							e = new Operation(Operation.Operator.NE, o.getOperand(0), o.getOperand(1));
+							break;
+						case NE:
+							e = new Operation(Operation.Operator.EQ, o.getOperand(0), o.getOperand(1));
+							break;
+						case GE:
+							e = new Operation(Operation.Operator.LT, o.getOperand(0), o.getOperand(1));
+							break;
+						case GT:
+							e = new Operation(Operation.Operator.LE, o.getOperand(0), o.getOperand(1));
+							break;
+						case LE:
+							e = new Operation(Operation.Operator.GT, o.getOperand(0), o.getOperand(1));
+							break;
+						case LT:
+							e = new Operation(Operation.Operator.GE, o.getOperand(0), o.getOperand(1));
+							break;
+						default:
+							break;
+						}
+					} else {
+						// We just drop the NOT??
+					}
+					stack.push(e);
+				} else {
+					// We just drop the NOT??
+				}
+				break;
 			default:
 				break;
 			}
