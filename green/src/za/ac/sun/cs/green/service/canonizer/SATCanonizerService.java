@@ -203,23 +203,25 @@ public class SATCanonizerService extends BasicService {
 //				new TreeSet<Expression>();
 				Expression c = null;
 				for (Expression e : newConjuncts) {
-					Operation o = (Operation) e;
-					if (o.getOperator() == Operation.Operator.GT) {
-						e = new Operation(Operation.Operator.LT, scale(-1,
-								o.getOperand(0)), o.getOperand(1));
-					} else if (o.getOperator() == Operation.Operator.GE) {
-						e = new Operation(Operation.Operator.LE, scale(-1,
-								o.getOperand(0)), o.getOperand(1));
-					}
-					o = (Operation) e;
-					if (o.getOperator() == Operation.Operator.GT) {
-						e = new Operation(Operation.Operator.GE, merge(
-								o.getOperand(0), new IntConstant(-1)),
-								o.getOperand(1));
-					} else if (o.getOperator() == Operation.Operator.LT) {
-						e = new Operation(Operation.Operator.LE, merge(
-								o.getOperand(0), new IntConstant(1)),
-								o.getOperand(1));
+					if (e instanceof Operation) {
+						Operation o = (Operation) e;
+						if (o.getOperator() == Operation.Operator.GT) {
+							e = new Operation(Operation.Operator.LT, scale(-1,
+									o.getOperand(0)), o.getOperand(1));
+						} else if (o.getOperator() == Operation.Operator.GE) {
+							e = new Operation(Operation.Operator.LE, scale(-1,
+									o.getOperand(0)), o.getOperand(1));
+						}
+						o = (Operation) e;
+						if (o.getOperator() == Operation.Operator.GT) {
+							e = new Operation(Operation.Operator.GE, merge(
+									o.getOperand(0), new IntConstant(-1)),
+									o.getOperand(1));
+						} else if (o.getOperator() == Operation.Operator.LT) {
+							e = new Operation(Operation.Operator.LE, merge(
+									o.getOperand(0), new IntConstant(1)),
+									o.getOperand(1));
+						}
 					}
 					if (c == null) {
 						c = e;
@@ -465,6 +467,10 @@ public class SATCanonizerService extends BasicService {
 						default:
 							break;
 						}
+					} else if (e == Operation.TRUE) {
+						e = Operation.FALSE;
+					} else if (e == Operation.FALSE) {
+						e = Operation.TRUE;
 					} else {
 						// We just drop the NOT??
 					}

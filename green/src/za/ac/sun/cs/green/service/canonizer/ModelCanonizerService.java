@@ -48,10 +48,13 @@ public class ModelCanonizerService extends SATCanonizerService {
 			Instance subInstance, Object result) {
 		@SuppressWarnings("unchecked")
 		HashMap<Variable,Object> r = (HashMap<Variable,Object>)result;
+		if (r == null) {
+			return null;
+		}
 		
 		@SuppressWarnings("unchecked")
 		HashMap<Variable, Variable> reverseMap = (HashMap<Variable, Variable>)instance.getData(RENAME);
-		
+
 		HashMap<Variable,Object> newResult = new HashMap<Variable,Object>();
 		for (Map.Entry<Variable,Object> m : r.entrySet()) {
 			newResult.put(reverseMap.get(m.getKey()), m.getValue());

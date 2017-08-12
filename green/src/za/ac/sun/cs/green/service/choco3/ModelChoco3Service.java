@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import choco.cp.model.CPModel;
-import choco.cp.solver.CPSolver;
-import choco.kernel.model.variables.integer.IntegerVariable;
 import za.ac.sun.cs.green.Instance;
 import za.ac.sun.cs.green.Green;
 import za.ac.sun.cs.green.expr.Variable;
