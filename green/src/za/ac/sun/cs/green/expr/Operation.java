@@ -137,6 +137,10 @@ public class Operation extends Expression {
 		return operator;
 	}
 
+	public int getOperatandCount() {
+		return operands.length;
+	}
+
 	public Iterable<Expression> getOperands() {
 		return new Iterable<Expression>() {
 			@Override
