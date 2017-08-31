@@ -81,4 +81,58 @@ public class ModelZ3JavaTest {
 		checkModelRange(o3,v1,10,99);
 	}
 	
+	//x3!=1&&&&x4<=x5&&((x4!=x5)&&((x2==1)&&((x1==1)&&(0==0))))))
+	
+	@Test
+	public void test03() {
+		IntVariable x1 = new IntVariable("x1", 0, 99);
+		IntVariable x2 = new IntVariable("x2", 0, 99);
+		IntVariable x3 = new IntVariable("x3", 0, 99);
+		IntVariable x4 = new IntVariable("x4", 0, 99);
+		IntVariable x5 = new IntVariable("x5", 0, 99);
+		
+		IntConstant c1 = new IntConstant(1);
+		Operation o1 = new Operation(Operation.Operator.NE, x3, c1);
+		Operation o2 = new Operation(Operation.Operator.LE, x4, x5);
+		Operation o3 = new Operation(Operation.Operator.NE, x4, x5);
+		Operation o4 = new Operation(Operation.Operator.AND, o2, o3);
+		Operation o5 = new Operation(Operation.Operator.AND, o1, o4);
+		checkModelRange(o5,x4,0,99);
+	}
+	
+	//(!(x3==1))&&((x5==x5)&&((x4<=x5)&&((x4!=x5)&&((x2==1)&&((x1==1)&&(0==0))))))
+	@Test
+	public void test04() {
+		IntVariable x1 = new IntVariable("x1", 0, 99);
+		IntVariable x2 = new IntVariable("x2", 0, 99);
+		IntVariable x3 = new IntVariable("x3", 0, 99);
+		IntVariable x4 = new IntVariable("x4", 0, 99);
+		IntVariable x5 = new IntVariable("x5", 0, 99);
+		
+		IntConstant c1 = new IntConstant(1);
+		IntConstant c0 = new IntConstant(0);
+		
+		Operation x2eq1 = new Operation(Operation.Operator.EQ, x2, c1);
+		Operation x1eq1 = new Operation(Operation.Operator.EQ, x1, c1);
+		Operation c0eqc0 = new Operation(Operation.Operator.EQ, c0, c0);
+		Operation o4a = new Operation(Operation.Operator.AND, x1eq1, c0eqc0);
+		Operation o4b = new Operation(Operation.Operator.AND, x2eq1, o4a);
+		
+		
+		Operation o1a = new Operation(Operation.Operator.EQ, x3, c1);
+		Operation o1 = new Operation(Operation.Operator.NOT, o1a);
+		
+		Operation o2a = new Operation(Operation.Operator.EQ, x5, x5);
+		Operation o2 = new Operation(Operation.Operator.LE, x4, x5);
+		Operation o3 = new Operation(Operation.Operator.NE, x4, x5);
+		Operation o3a = new Operation(Operation.Operator.AND, o3, o4b);
+		
+		Operation o4 = new Operation(Operation.Operator.AND, o2, o3a);
+		
+		Operation o5 = new Operation(Operation.Operator.AND, o2a, o4);
+		Operation o6 = new Operation(Operation.Operator.AND, o1, o5);
+		checkModelRange(o6,x4,0,99);
+	}
+	
+	
 }

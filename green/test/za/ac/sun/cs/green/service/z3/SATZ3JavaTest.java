@@ -93,7 +93,7 @@ public class SATZ3JavaTest {
 	@Test
 	public void test01() {
 		IntVariable v = new IntVariable("aa", 0, 99);
-		IntConstant c = new IntConstant(0);
+		IntConstant c = new IntConstant(100);
 		Operation o = new Operation(Operation.Operator.EQ, v, c);
 		checkSat(o);
 	}
