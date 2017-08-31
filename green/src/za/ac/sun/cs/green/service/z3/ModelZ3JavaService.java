@@ -48,6 +48,7 @@ public class ModelZ3JavaService extends ModelService {
 		}
 		// get context out of the translator
 		BoolExpr expr = translator.getTranslation();
+		log.log(Level.INFO, "CONSTRAINTFORZ3: " + expr);
 		// model should now be in ctx
 		try {
 			Z3solver = ctx.mkSolver();

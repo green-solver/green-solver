@@ -135,6 +135,9 @@ class Z3JavaTranslator extends Visitor {
 		}
 		try {
 			switch (operation.getOperator()) {
+			case NOT: 
+				stack.push(context.mkNot((BoolExpr) l));
+				break;
 			case EQ:
 				stack.push(context.mkEq(l, r));
 				break;
