@@ -28,12 +28,9 @@ public class SATCanonizerTest {
 		Properties props = new Properties();
 		props.setProperty("green.services", "sat");
 		props.setProperty("green.service.sat", "(slice (canonize sink))");
-		props.setProperty("green.service.sat.slice",
-				"za.ac.sun.cs.green.service.slicer.SATSlicerService");
-		props.setProperty("green.service.sat.canonize",
-				"za.ac.sun.cs.green.service.canonizer.SATCanonizerService");
-		props.setProperty("green.service.sat.sink",
-				"za.ac.sun.cs.green.service.sink.SinkService");
+		props.setProperty("green.service.sat.slice", "za.ac.sun.cs.green.service.slicer.SATSlicerService");
+		props.setProperty("green.service.sat.canonize", "za.ac.sun.cs.green.service.canonizer.SATCanonizerService");
+		props.setProperty("green.service.sat.sink", "za.ac.sun.cs.green.service.sink.SinkService");
 		Configuration config = new Configuration(solver, props);
 		config.configure();
 	}
@@ -43,11 +40,10 @@ public class SATCanonizerTest {
 		String s1 = s0.replaceAll("v[0-9]", "v");
 		SortedSet<String> s2 = new TreeSet<String>(Arrays.asList(s1.split("&&")));
 		SortedSet<String> s3 = new TreeSet<String>(Arrays.asList(expected));
-		assertEquals(s2, s3);
+		assertEquals(s3, s2);
 	}
 
-	private void check(Expression expression, String full,
-			String... expected) {
+	private void check(Expression expression, String full, String... expected) {
 		Instance i = new Instance(solver, null, null, expression);
 		Expression e = i.getExpression();
 		assertTrue(e.equals(expression));
@@ -60,8 +56,7 @@ public class SATCanonizerTest {
 		finalCheck(j.getExpression().toString(), expected);
 	}
 
-	private void check(Expression expression, Expression parentExpression,
-			String full, String... expected) {
+	private void check(Expression expression, Expression parentExpression, String full, String... expected) {
 		Instance i1 = new Instance(solver, null, parentExpression);
 		Instance i2 = new Instance(solver, i1, expression);
 		Expression e = i2.getExpression();
@@ -129,7 +124,8 @@ public class SATCanonizerTest {
 		Operation o4 = new Operation(Operation.Operator.EQ, v4, v5);
 		Operation o34 = new Operation(Operation.Operator.AND, o3, o4);
 		Operation o234 = new Operation(Operation.Operator.AND, o2, o34);
-		check(o1, o234, "(aa==bb)&&((bb==cc)&&((cc==dd)&&(dd==ee)))", "1*v+-1*v==0", "1*v+-1*v==0", "1*v+-1*v==0", "1*v+-1*v==0");
+		check(o1, o234, "(aa==bb)&&((bb==cc)&&((cc==dd)&&(dd==ee)))", "1*v+-1*v==0", "1*v+-1*v==0", "1*v+-1*v==0",
+				"1*v+-1*v==0");
 	}
 
 	@Test
@@ -162,7 +158,8 @@ public class SATCanonizerTest {
 		Operation o2 = new Operation(Operation.Operator.LT, v2, new Operation(Operation.Operator.ADD, v4, v5));
 		Operation o3 = new Operation(Operation.Operator.LT, v3, new Operation(Operation.Operator.ADD, v6, v7));
 		Operation o23 = new Operation(Operation.Operator.AND, o2, o3);
-		check(o1, o23, "(aa<(bb+cc))&&((bb<(dd+ee))&&(cc<(ff+gg)))", "1*v+-1*v+-1*v+1<=0", "1*v+-1*v+-1*v+1<=0", "1*v+-1*v+-1*v+1<=0");
+		check(o1, o23, "(aa<(bb+cc))&&((bb<(dd+ee))&&(cc<(ff+gg)))", "1*v+-1*v+-1*v+1<=0", "1*v+-1*v+-1*v+1<=0",
+				"1*v+-1*v+-1*v+1<=0");
 	}
 
 	@Test
@@ -306,7 +303,7 @@ public class SATCanonizerTest {
 		Operation o3 = new Operation(Operation.Operator.AND, o1, o2);
 		check(o3, "(2<=2)&&(aa<2)", "1*v+-1<=0");
 	}
-	
+
 	@Test
 	public void test21() {
 		IntVariable x1 = new IntVariable("x1", 0, 99);
@@ -314,30 +311,39 @@ public class SATCanonizerTest {
 		IntVariable x3 = new IntVariable("x3", 0, 99);
 		IntVariable x4 = new IntVariable("x4", 0, 99);
 		IntVariable x5 = new IntVariable("x5", 0, 99);
-		
+
 		IntConstant c1 = new IntConstant(1);
 		IntConstant c0 = new IntConstant(0);
-		
+
 		Operation x2eq1 = new Operation(Operation.Operator.EQ, x2, c1);
 		Operation x1eq1 = new Operation(Operation.Operator.EQ, x1, c1);
 		Operation c0eqc0 = new Operation(Operation.Operator.EQ, c0, c0);
 		Operation o4a = new Operation(Operation.Operator.AND, x1eq1, c0eqc0);
 		Operation o4b = new Operation(Operation.Operator.AND, x2eq1, o4a);
-		
-		
+
 		Operation o1a = new Operation(Operation.Operator.EQ, x3, c1);
 		Operation o1 = new Operation(Operation.Operator.NOT, o1a);
-		
+
 		Operation o2a = new Operation(Operation.Operator.EQ, x5, x5);
 		Operation o2 = new Operation(Operation.Operator.LE, x4, x5);
 		Operation o3 = new Operation(Operation.Operator.NE, x4, x5);
 		Operation o3a = new Operation(Operation.Operator.AND, o3, o4b);
-		
+
 		Operation o4 = new Operation(Operation.Operator.AND, o2, o3a);
-		
+
 		Operation o5 = new Operation(Operation.Operator.AND, o2a, o4);
 		Operation o6 = new Operation(Operation.Operator.AND, o1, o5);
 		check(o6, "(!(x3==1))&&((x5==x5)&&((x4<=x5)&&((x4!=x5)&&((x2==1)&&((x1==1)&&(0==0))))))", "1*v+-1<=0");
+	}
+
+	@Test
+	public void test23() {
+		IntVariable x5 = new IntVariable("x5", 0, 99);
+		IntConstant c1 = new IntConstant(1);
+		IntConstant c0 = new IntConstant(0);
+		Operation o2b = new Operation(Operation.Operator.NE, x5, x5);
+		Operation o2a = new Operation(Operation.Operator.NOT, o2b);
+		check(o2a, "!(x5!=x5)", "0==0");
 	}
 
 }

@@ -245,7 +245,8 @@ public class Slicer {
 		public void preVisit(Expression expression) {
 			if (expression instanceof Operation) {
 				Operation.Operator op = ((Operation) expression).getOperator();
-				if ((op == Operation.Operator.EQ)
+				if ((op == Operation.Operator.NOT)
+						|| (op == Operation.Operator.EQ)
 						|| (op == Operation.Operator.NE)
 						|| (op == Operation.Operator.LT)
 						|| (op == Operation.Operator.LE)
@@ -300,7 +301,8 @@ public class Slicer {
 		public void preVisit(Expression expression) {
 			if (expression instanceof Operation) {
 				Operation.Operator op = ((Operation) expression).getOperator();
-				if ((op == Operation.Operator.EQ)
+				if ((op == Operation.Operator.NOT)
+						|| (op == Operation.Operator.EQ)
 						|| (op == Operation.Operator.NE)
 						|| (op == Operation.Operator.LT)
 						|| (op == Operation.Operator.LE)

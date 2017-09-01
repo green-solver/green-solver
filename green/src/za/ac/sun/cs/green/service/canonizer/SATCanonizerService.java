@@ -197,7 +197,9 @@ public class SATCanonizerService extends BasicService {
 			} else {
 				if (!stack.isEmpty()) {
 					Expression x = stack.pop();
-					if (!x.equals(Operation.TRUE)) {
+					if (x.equals(Operation.FALSE)) {
+						return Operation.FALSE;
+					} else if (!x.equals(Operation.TRUE)) {
 						conjuncts.add(x);
 					}
 				}
@@ -205,7 +207,9 @@ public class SATCanonizerService extends BasicService {
 //				new TreeSet<Expression>();
 				Expression c = null;
 				for (Expression e : newConjuncts) {
-					if (e instanceof Operation) {
+					if (e.equals(Operation.FALSE)) {
+						return Operation.FALSE;
+					} else if (e instanceof Operation) {
 						Operation o = (Operation) e;
 						if (o.getOperator() == Operation.Operator.GT) {
 							e = new Operation(Operation.Operator.LT, scale(-1,
@@ -409,7 +413,8 @@ public class SATCanonizerService extends BasicService {
 						if (b) {
 							stack.push(Operation.TRUE);
 						} else {
-							unsatisfiable = true;
+							stack.push(Operation.FALSE);
+							// unsatisfiable = true;
 						}
 					} else {
 						stack.push(new Operation(op, e, Operation.ZERO));
@@ -445,7 +450,11 @@ public class SATCanonizerService extends BasicService {
 			case NOT:
 				if (!stack.isEmpty()) {
 					Expression e = stack.pop();
-					if (e instanceof Operation) {
+					if (e.equals(Operation.TRUE)) {
+						e = Operation.FALSE;
+					} else if (e.equals(Operation.FALSE)) {
+						e = Operation.TRUE;
+					} else if (e instanceof Operation) {
 						Operation o = (Operation) e;
 						switch (o.getOperator()) {
 						case NOT:
@@ -472,10 +481,6 @@ public class SATCanonizerService extends BasicService {
 						default:
 							break;
 						}
-					} else if (e == Operation.TRUE) {
-						e = Operation.FALSE;
-					} else if (e == Operation.FALSE) {
-						e = Operation.TRUE;
 					} else {
 						// We just drop the NOT??
 					}
