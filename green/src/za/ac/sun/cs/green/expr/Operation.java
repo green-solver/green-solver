@@ -133,6 +133,23 @@ public class Operation extends Expression {
 		this.operands = operands;
 	}
 
+	public static Expression apply(Operator operator, Expression... operands) {
+		switch (operator) {
+		case ADD:
+			int result = 0;
+			for (Expression operand : operands) {
+				if (!(operand instanceof IntConstant)) {
+					return new Operation(operator, operands);
+				} else {
+					result += ((IntConstant) operand).getValue();
+				}
+			}
+			return new IntConstant(result);
+		default:
+			return new Operation(operator, operands);
+		}
+	}
+
 	public Operator getOperator() {
 		return operator;
 	}
