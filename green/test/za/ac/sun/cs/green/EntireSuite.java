@@ -27,6 +27,7 @@ import za.ac.sun.cs.green.service.latte.CountLattETest;
 import za.ac.sun.cs.green.service.latte.CountLattEWithBounderTest;
 import za.ac.sun.cs.green.service.slicer.ParallelSATSlicerTest;
 import za.ac.sun.cs.green.service.slicer.SATSlicerTest;
+import za.ac.sun.cs.green.service.z3.SATZ3JavaTest;
 import za.ac.sun.cs.green.service.z3.SATZ3Test;
 import za.ac.sun.cs.green.util.ParallelSATTest;
 import za.ac.sun.cs.green.util.SetServiceTest;
@@ -48,7 +49,8 @@ import za.ac.sun.cs.green.util.SetTaskManagerTest;
 	CountLattEWithBounderTest.class,
 	BounderTest.class,
 	SMTLIB2Scanner0Test.class,
-	SMTLIB2Parser0Test.class
+	SMTLIB2Parser0Test.class,
+	SATZ3JavaTest.class
 })
 
 public class EntireSuite {
@@ -59,9 +61,9 @@ public class EntireSuite {
 
 	public static final String Z3_PATH;
 
-	public static final boolean HAS_CVC3;
+	public static final boolean HAS_CVC3 = false;
 
-	public static final boolean HAS_LATTE;
+	public static final boolean HAS_LATTE = false;
 
 	public static final boolean HAS_Z3;
 
@@ -85,8 +87,8 @@ public class EntireSuite {
 		LATTE_PATH = latte;
 		BARVINOK_PATH = barvinok;
 		Z3_PATH = z3;
-		HAS_CVC3 = checkCVC3Presence();
-		HAS_LATTE = checkLattEPresence();
+		//HAS_CVC3 = checkCVC3Presence();
+		//HAS_LATTE = checkLattEPresence();
 		HAS_Z3 = checkZ3Presence();
 		HAS_Z3JAVA = checkZ3JavaPresence();
 	}
