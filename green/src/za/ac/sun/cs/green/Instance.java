@@ -72,4 +72,12 @@ public class Instance {
 		return data.get(key);
 	}
 	
+	@Override
+	public int hashCode() {
+		if (expression == null) 
+			return 0;
+		else 
+			return expression.toString().hashCode();
+	}
+	
 }
