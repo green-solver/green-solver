@@ -378,6 +378,14 @@ public class FactorExpression {
 			}
 		}
 
+		
+		private boolean isOr(Expression e) {
+			if (e instanceof Operation) {
+				Operation.Operator op = ((Operation) e).getOperator();
+				return (op == Operation.Operator.OR);
+			}
+			return false;
+		}
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -389,9 +397,23 @@ public class FactorExpression {
 		public void preVisit(Expression expression) {
 			if (expression instanceof Operation) {
 				Operation.Operator op = ((Operation) expression).getOperator();
-				if ((op == Operation.Operator.EQ) || (op == Operation.Operator.NE) || (op == Operation.Operator.LT) || (op == Operation.Operator.LE) || (op == Operation.Operator.GT) || (op == Operation.Operator.GE)) {
+				// only reset the conjunct if it is not already an OR expression
+				if (op == Operation.Operator.OR && !isOr(currentConjunct)) {
 					currentConjunct = expression;
 				}
+				else if ((op == Operation.Operator.EQ) || (op == Operation.Operator.NE) || (op == Operation.Operator.LT) || (op == Operation.Operator.LE) || (op == Operation.Operator.GT) || (op == Operation.Operator.GE)) {
+					// check if this is not part of an OR expression
+					if (!isOr(currentConjunct))
+						currentConjunct = expression;
+				}
+			}
+		}
+		
+		@Override
+		public void postVisit(Expression expression) {
+			if (expression instanceof Operation) {
+				if (expression == currentConjunct)
+					currentConjunct = null;
 			}
 		}
 
