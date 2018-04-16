@@ -31,7 +31,9 @@ public class SATZ3JavaCNFTest {
 		solver = new Green();
 		Properties props = new Properties();
 		props.setProperty("green.services", "sat");
-		props.setProperty("green.service.sat","z3");
+		props.setProperty("green.service.sat","(factor z3)");
+		props.setProperty("green.service.sat.factor",
+				"za.ac.sun.cs.green.service.factorizer.SATFactorizerService");
 		props.setProperty("green.service.sat.z3",
 				"za.ac.sun.cs.green.service.z3.SATZ3JavaService");
 		Configuration config = new Configuration(solver, props);
@@ -75,10 +77,77 @@ public class SATZ3JavaCNFTest {
 	private Operation BOOL(IntVariable v) {
 		return new Operation(Operation.Operator.NE, v, Operation.ZERO);
 	}
-	
+
+	/* (v1 or v2) and (v3 or v4) */
 	
 	@Test
 	public void test1() {
+		Operation v1 = BOOL(new IntVariable("a1", 0, 1));
+		Operation v2 = BOOL(new IntVariable("a2", 0, 1));
+		Operation v3 = BOOL(new IntVariable("a3", 0, 1));
+		Operation v4 = BOOL(new IntVariable("a4", 0, 1));
+
+		
+		Operation c1 = new Operation(Operation.Operator.OR, v1, v2);
+		Operation c2 = new Operation(Operation.Operator.OR, v3, v4);
+		
+		Operation all = new Operation(Operation.Operator.AND, c1, c2);
+		checkSat(all);
+	}	
+
+	@Test
+	public void test01() {
+		Operation v1 = BOOL(new IntVariable("a1", 0, 1));
+		Operation v2 = BOOL(new IntVariable("a2", 0, 1));
+		Operation v3 = BOOL(new IntVariable("a3", 0, 1));
+		Operation v4 = BOOL(new IntVariable("a4", 0, 1));
+
+		
+		Operation c1 = new Operation(Operation.Operator.OR, v1, v2);
+		Operation c2 = new Operation(Operation.Operator.OR, c1, v3);
+		
+		Operation all = new Operation(Operation.Operator.AND, c2, v4);
+		checkSat(all);
+	}	
+
+	
+	@Test
+	public void test2() {
+		Operation v1 = BOOL(new IntVariable("a1", 0, 1));
+		Operation v2 = BOOL(new IntVariable("a2", 0, 1));
+		Operation v3 = BOOL(new IntVariable("a3", 0, 1));
+		Operation v4 = BOOL(new IntVariable("a4", 0, 1));
+
+		
+		Operation c1 = new Operation(Operation.Operator.OR, v1, v2);
+		Operation c2 = new Operation(Operation.Operator.OR, v2, v4);
+		
+		Operation all = new Operation(Operation.Operator.AND, c1, c2);
+		checkSat(all);
+	}	
+
+	@Test
+	public void test3() {
+		Operation v1 = BOOL(new IntVariable("a1", 0, 1));
+		Operation v2 = BOOL(new IntVariable("a2", 0, 1));
+		Operation v3 = BOOL(new IntVariable("a3", 0, 1));
+		Operation v4 = BOOL(new IntVariable("a4", 0, 1));
+		Operation v5 = BOOL(new IntVariable("a5", 0, 1));
+		Operation v6 = BOOL(new IntVariable("a6", 0, 1));
+		
+		Operation c1 = new Operation(Operation.Operator.OR, v1, v2);
+		Operation c2 = new Operation(Operation.Operator.OR, v3, v4);
+		Operation c3 = new Operation(Operation.Operator.OR, v5, v6);
+		
+		Operation all1 = new Operation(Operation.Operator.AND, c1, c2);
+		
+		Operation all = new Operation(Operation.Operator.AND, all1, c3);
+		checkSat(all);
+	}	
+	
+	// (!a5 || a1 || a4)  &&  (!a1 || a5 || a3 || a4) && (!a3 || !a4) 
+	@Test
+	public void test4() {
 		Operation v1 = BOOL(new IntVariable("a1", 0, 1));
 		Operation v3 = BOOL(new IntVariable("a3", 0, 1));
 		Operation v4 = BOOL(new IntVariable("a4", 0, 1));
